@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 const TAWK_SCRIPT_ID = "tawk-to-widget";
-const TAWK_SCRIPT_URL = "https://embed.tawk.to/6a7728357e01e61d477734a2/1jvgna52b";
+const TAWK_SCRIPT_URL = "https://embed.tawk.to/6a7728357e01e61d477734a2/1jvgsfmhq";
 const RAISED_WIDGET_PATH = /^\/(workshop|apply)(?:\/|$)/;
 
 type TawkWindow = Window & {

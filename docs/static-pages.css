@@ -14,3 +14,17 @@
 .sticky-cta-slot {
   background: #f7f7f7 !important;
 }
+
+@media (hover: hover) {
+  .home-icon {
+    pointer-events: auto;
+  }
+
+  .home-icon img {
+    transition: scale 0.18s ease;
+  }
+
+  .home-icon:hover img {
+    scale: 1.15;
+  }
+}

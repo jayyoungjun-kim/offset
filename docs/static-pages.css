@@ -6,3 +6,7 @@
 .typing-intro-text {
   display: none !important;
 }
+
+.sticky-cta {
+  background: transparent !important;
+}

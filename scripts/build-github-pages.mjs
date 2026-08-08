@@ -181,7 +181,8 @@ const applicationForm = String.raw`(() => {
     errors.forEach(([name,message]) => showError(name,message));
     if (errors.length) { fieldFor(errors[0][0])?.scrollIntoView({behavior:"smooth",block:"center"}); return; }
 
-    clearSubmitError(); submitButton.disabled = true; submitButton.textContent = "제출 중...";
+    clearSubmitError(); submitButton.disabled = true;
+    submitButton.innerHTML = '<span class="submitting-label">제출 중<span class="submitting-dots" aria-hidden="true"><i>.</i><i>.</i><i>.</i></span></span>';
     try {
       let storedFile = null;
       if (file) {

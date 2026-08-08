@@ -10,3 +10,7 @@
 .sticky-cta {
   background: transparent !important;
 }
+
+.sticky-cta-slot {
+  background: #f7f7f7 !important;
+}

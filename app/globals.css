@@ -54,7 +54,7 @@ main{padding-top:60px}
 @media(max-width:420px){.sticky-cta{top:calc(100vh - 82px);margin-bottom:-82px}}
 .page-body{padding-bottom:80px}
 .page-body .main-content{padding-bottom:80px}
-.sticky-cta-slot{height:50px}
+.sticky-cta-slot{height:50px;background:#f7f7f7}
 .sticky-cta{position:fixed;inset:auto 0 20px;margin:0;padding:0;background:transparent;z-index:20}
 .sticky-cta.is-docked{position:static}
 .workshop-summary{width:100%;margin:0;padding:24px 0;border-top:1px solid #eee;border-bottom:1px solid #eee;display:flex;flex-direction:column;gap:14px}

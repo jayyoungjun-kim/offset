@@ -13,6 +13,15 @@ const channelPluginKey =
 const channelTalk = String.raw`(() => {
   const pluginKey = ${JSON.stringify(channelPluginKey)};
   if (!pluginKey || window.ChannelIOInitialized) return;
+  const useRaisedLauncher = /^\/(workshop|apply)(?:\/|$)/.test(location.pathname) && matchMedia("(max-width: 720px)").matches;
+  if (useRaisedLauncher && !document.getElementById("channel-talk-raised-launcher")) {
+    const launcher = document.createElement("button");
+    launcher.id = "channel-talk-raised-launcher";
+    launcher.className = "channel-talk-raised-launcher";
+    launcher.type = "button";
+    launcher.setAttribute("aria-label", "OFFSET 상담 열기");
+    document.body.appendChild(launcher);
+  }
   const channel = function(){ channel.c(arguments); };
   channel.q = [];
   channel.c = args => channel.q.push(args);
@@ -23,7 +32,10 @@ const channelTalk = String.raw`(() => {
   script.async = true;
   script.src = "https://cdn.channel.io/plugin/ch-plugin-web.js";
   document.head.appendChild(script);
-  channel("boot", {pluginKey});
+  channel("boot", {
+    pluginKey,
+    ...(useRaisedLauncher ? {customLauncherSelector:"#channel-talk-raised-launcher"} : {})
+  });
 })();`;
 
 const homeMotion = String.raw`(() => {

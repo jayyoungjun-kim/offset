@@ -12,7 +12,7 @@
 }
 
 .sticky-cta-slot {
-  background: #f7f7f7 !important;
+  background: transparent !important;
 }
 
 @media (hover: hover) {

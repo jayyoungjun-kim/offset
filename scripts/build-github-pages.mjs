@@ -67,10 +67,153 @@ const workshopCta = String.raw`(() => {
   update(); addEventListener("scroll", update, {passive:true}); addEventListener("resize", update);
 })();`;
 
+const applicationForm = String.raw`(() => {
+  const form = document.querySelector(".application-form");
+  if (!form) return;
+  const apiUrl = "https://portfolio-workshop-1.jayyoungjunkim.chatgpt.site/api/applications";
+  const maxFileSize = 20 * 1024 * 1024;
+  const fileInput = form.querySelector('input[type="file"]');
+  const upload = form.querySelector(".upload");
+  const uploadCopy = form.querySelector(".upload-copy > span:first-child");
+  const uploadNote = form.querySelector(".upload-note");
+  const concern = form.querySelector('[name="concern"]');
+  const characterCount = form.querySelector(".character-count");
+  const submitButton = form.querySelector('.submit-button');
+
+  const fieldFor = name => form.querySelector('[name="' + name + '"]')?.closest(".field") || form.querySelector('[aria-labelledby="' + name + '-label"]');
+  const clearError = name => {
+    const field = fieldFor(name);
+    field?.removeAttribute("aria-invalid");
+    field?.querySelector('[data-error-for="' + name + '"]')?.remove();
+  };
+  const showError = (name, message) => {
+    const field = fieldFor(name);
+    if (!field) return;
+    clearError(name);
+    field.setAttribute("aria-invalid", "true");
+    const error = document.createElement("p");
+    error.className = "error-text";
+    error.dataset.errorFor = name;
+    error.setAttribute("role", "alert");
+    error.textContent = message;
+    field.append(error);
+  };
+  const clearSubmitError = () => form.querySelector('[data-error-for="submit"]')?.remove();
+  const showSubmitError = message => {
+    clearSubmitError();
+    const error = document.createElement("p");
+    error.className = "error-text";
+    error.dataset.errorFor = "submit";
+    error.setAttribute("role", "alert");
+    error.textContent = message;
+    submitButton.closest(".form-submit-slot").before(error);
+  };
+
+  form.addEventListener("input", event => {
+    const name = event.target.name;
+    if (name) clearError(name === "portfolioLink" ? "portfolio" : name);
+    if (event.target === concern && characterCount) characterCount.textContent = concern.value.length + "/100";
+  });
+  form.addEventListener("change", event => {
+    const name = event.target.name;
+    if (name) clearError(name);
+  });
+  fileInput?.addEventListener("change", () => {
+    const file = fileInput.files?.[0];
+    clearError("portfolio");
+    if (!file) return;
+    if (file.size > maxFileSize) {
+      fileInput.value = "";
+      showError("portfolio", "파일 용량은 최대 20MB까지 첨부할 수 있습니다.");
+      return;
+    }
+    if (uploadCopy) uploadCopy.textContent = file.name;
+    if (uploadNote) uploadNote.textContent = "파일이 첨부되었습니다.";
+  });
+  upload?.addEventListener("dragover", event => { event.preventDefault(); upload.classList.add("is-dragging"); });
+  upload?.addEventListener("dragleave", () => upload.classList.remove("is-dragging"));
+  upload?.addEventListener("drop", event => {
+    event.preventDefault(); upload.classList.remove("is-dragging");
+    if (event.dataTransfer.files?.[0] && fileInput) {
+      const transfer = new DataTransfer(); transfer.items.add(event.dataTransfer.files[0]);
+      fileInput.files = transfer.files; fileInput.dispatchEvent(new Event("change", {bubbles:true}));
+    }
+  });
+
+  const uploadPortfolio = async (file, uploadUrl) => {
+    const headers = {"content-type": file.type || "application/octet-stream"};
+    try {
+      const response = await fetch(uploadUrl, {method:"PUT", headers, body:file});
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.id) throw new Error(result.error?.message || "포트폴리오 파일 업로드에 실패했습니다.");
+      return {id:result.id,name:result.name||file.name,url:result.webViewLink||"https://drive.google.com/open?id="+result.id,size:file.size,type:file.type||"application/octet-stream"};
+    } catch (error) {
+      if (!(error instanceof TypeError)) throw error;
+      const response = await fetch(apiUrl, {method:"PUT",credentials:"include",headers:{...headers,"x-file-size":String(file.size),"x-upload-session":uploadUrl},body:file});
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.file) throw new Error(result.error || "포트폴리오 파일 업로드에 실패했습니다.");
+      return result.file;
+    }
+  };
+
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+    const data = new FormData(form);
+    const file = fileInput?.files?.[0] || null;
+    const conditions = data.getAll("conditions").map(String);
+    const availability = data.getAll("availability").map(String);
+    const values = {
+      name:String(data.get("name")||"").trim(), phone:String(data.get("phone")||"").trim(), email:String(data.get("email")||"").trim(),
+      career:String(data.get("career")||""), portfolioLink:String(data.get("portfolioLink")||"").trim(), concern:String(data.get("concern")||"").trim(),
+      commitment:String(data.get("commitment")||""), conditions, availability,
+    };
+    form.querySelectorAll("[data-error-for]").forEach(error => error.remove());
+    const errors = [];
+    if (!values.name) errors.push(["name","이름을 입력해 주세요."]);
+    if (!values.phone) errors.push(["phone","연락처를 입력해 주세요."]);
+    if (!values.email) errors.push(["email","이메일을 입력해 주세요."]);
+    if (!values.career) errors.push(["career","현재 경력을 선택해 주세요."]);
+    if (!values.portfolioLink && !file) errors.push(["portfolio","포트폴리오 링크를 입력하거나 파일을 첨부해 주세요."]);
+    if (values.concern.length < 100) errors.push(["concern","현재 고민되는 부분을 100자 이상 입력해 주세요."]);
+    if (!values.commitment) errors.push(["commitment","포트폴리오 수정 가능 여부를 선택해 주세요."]);
+    if (conditions.length !== 3) errors.push(["conditions","참여 조건을 모두 확인하고 선택해 주세요."]);
+    if (availability.length === 0) errors.push(["availability","가능한 시간대를 한 개 이상 선택해 주세요."]);
+    errors.forEach(([name,message]) => showError(name,message));
+    if (errors.length) { fieldFor(errors[0][0])?.scrollIntoView({behavior:"smooth",block:"center"}); return; }
+
+    clearSubmitError(); submitButton.disabled = true; submitButton.textContent = "제출 중...";
+    try {
+      let storedFile = null;
+      if (file) {
+        const initResponse = await fetch(apiUrl, {method:"POST",credentials:"include",headers:{"content-type":"application/json"},body:JSON.stringify({action:"initUpload",name:file.name,type:file.type||"application/octet-stream",size:file.size,applicantName:values.name})});
+        const initResult = await initResponse.json().catch(() => ({}));
+        if (!initResponse.ok || !initResult.uploadUrl) throw new Error(initResult.error || "파일 업로드를 준비하지 못했습니다.");
+        storedFile = await uploadPortfolio(file, initResult.uploadUrl);
+      }
+      const response = await fetch(apiUrl, {method:"POST",credentials:"include",headers:{"content-type":"application/json"},body:JSON.stringify({...values,file:storedFile})});
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || "신청서를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.");
+      location.assign("/offset/apply/complete/");
+    } catch (error) {
+      showSubmitError(error instanceof Error ? error.message : "신청서를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.");
+      submitButton.disabled = false; submitButton.textContent = "신청서 제출하기";
+    }
+  });
+
+  const slot = form.querySelector(".form-submit-slot");
+  const sticky = slot?.querySelector(".form-submit");
+  if (slot && sticky) {
+    const update = () => sticky.classList.toggle("is-docked", slot.getBoundingClientRect().top <= innerHeight - slot.offsetHeight - 20);
+    update(); addEventListener("scroll", update, {passive:true}); addEventListener("resize", update);
+  }
+})();`;
+
 const routeScripts = new Map([
   ["/", homeMotion],
   ["/about", typingIntro],
   ["/workshop", workshopCta],
+  ["/apply", applicationForm],
+  ["/apply/complete", ""],
 ]);
 
 function transformHtml(html, route) {
@@ -105,8 +248,6 @@ for (const route of routeScripts.keys()) {
   await writeFile(path.join(routeDir, "index.html"), html);
 }
 
-await mkdir(path.join(outputDir, "apply"), { recursive: true });
-await writeFile(path.join(outputDir, "apply", "index.html"), `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=https://portfolio-workshop-1.jayyoungjunkim.chatgpt.site/apply"><title>신청 페이지로 이동 중</title></head><body><p><a href="https://portfolio-workshop-1.jayyoungjunkim.chatgpt.site/apply">신청 페이지로 이동</a></p></body></html>`);
 await writeFile(path.join(outputDir, "404.html"), await readFile(path.join(outputDir, "index.html"), "utf8"));
 await writeFile(path.join(outputDir, ".nojekyll"), "");
 

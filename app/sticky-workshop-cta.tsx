@@ -1,13 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function StickyWorkshopCta() {
+  const router = useRouter();
   const slotRef = useRef<HTMLDivElement>(null);
   const [isDocked, setIsDocked] = useState(false);
+  const prefetchApply = useCallback(() => router.prefetch("/apply"), [router]);
 
   useEffect(() => {
+    prefetchApply();
+
     const update = () => {
       const slot = slotRef.current;
       if (!slot) return;
@@ -26,11 +31,17 @@ export default function StickyWorkshopCta() {
       window.removeEventListener("resize", update);
       observer.disconnect();
     };
-  }, []);
+  }, [prefetchApply]);
 
   return <div className="sticky-cta-slot" ref={slotRef}>
     <div className={`sticky-cta${isDocked ? " is-docked" : ""}`}>
-      <Link href="/apply">워크샵 신청하기</Link>
+      <Link
+        href="/apply"
+        prefetch
+        onFocus={prefetchApply}
+        onPointerEnter={prefetchApply}
+        onTouchStart={prefetchApply}
+      >워크샵 신청하기</Link>
     </div>
   </div>;
 }

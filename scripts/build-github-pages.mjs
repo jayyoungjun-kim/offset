@@ -13,15 +13,7 @@ const channelPluginKey =
 const channelTalk = String.raw`(() => {
   const pluginKey = ${JSON.stringify(channelPluginKey)};
   if (!pluginKey || window.ChannelIOInitialized) return;
-  const useRaisedLauncher = /^\/(workshop|apply)(?:\/|$)/.test(location.pathname) && matchMedia("(max-width: 720px)").matches;
-  if (useRaisedLauncher && !document.getElementById("channel-talk-raised-launcher")) {
-    const launcher = document.createElement("button");
-    launcher.id = "channel-talk-raised-launcher";
-    launcher.className = "channel-talk-raised-launcher";
-    launcher.type = "button";
-    launcher.setAttribute("aria-label", "OFFSET 상담 열기");
-    document.body.appendChild(launcher);
-  }
+  const shouldRaiseLauncher = /^\/(workshop|apply)(?:\/|$)/.test(location.pathname) && matchMedia("(max-width: 720px)").matches;
   const channel = function(){ channel.c(arguments); };
   channel.q = [];
   channel.c = args => channel.q.push(args);
@@ -32,10 +24,26 @@ const channelTalk = String.raw`(() => {
   script.async = true;
   script.src = "https://cdn.channel.io/plugin/ch-plugin-web.js";
   document.head.appendChild(script);
-  channel("boot", {
-    pluginKey,
-    ...(useRaisedLauncher ? {customLauncherSelector:"#channel-talk-raised-launcher"} : {})
-  });
+  channel("boot", {pluginKey});
+  if (shouldRaiseLauncher) {
+    let observer;
+    let attempts = 0;
+    const raiseLauncher = () => {
+      const root = document.querySelector("#ch-plugin-entry > div")?.shadowRoot;
+      const wrapper = root?.querySelector("button")?.parentElement;
+      if (!wrapper) return;
+      wrapper.style.setProperty("bottom", "80px", "important");
+      if (!observer) {
+        observer = new MutationObserver(raiseLauncher);
+        observer.observe(root, {childList:true,subtree:true});
+      }
+    };
+    const interval = setInterval(() => {
+      raiseLauncher();
+      attempts += 1;
+      if (attempts >= 50) clearInterval(interval);
+    }, 200);
+  }
 })();`;
 
 const homeMotion = String.raw`(() => {

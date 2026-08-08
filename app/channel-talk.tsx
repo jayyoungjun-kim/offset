@@ -4,7 +4,6 @@ import { useEffect } from "react";
 
 const CHANNEL_SCRIPT_ID = "channel-talk-widget";
 const CHANNEL_SCRIPT_URL = "https://cdn.channel.io/plugin/ch-plugin-web.js";
-const CHANNEL_LAUNCHER_ID = "channel-talk-raised-launcher";
 const RAISED_LAUNCHER_PATH = /^\/(workshop|apply)(?:\/|$)/;
 const CHANNEL_PLUGIN_KEY =
   process.env.NEXT_PUBLIC_CHANNEL_PLUGIN_KEY ||
@@ -22,18 +21,9 @@ type ChannelWindow = Window & {
 export default function ChannelTalk() {
   useEffect(() => {
     const channelWindow = window as ChannelWindow;
-    const useRaisedLauncher =
+    const shouldRaiseLauncher =
       RAISED_LAUNCHER_PATH.test(window.location.pathname) &&
       window.matchMedia("(max-width: 720px)").matches;
-
-    if (useRaisedLauncher && !document.getElementById(CHANNEL_LAUNCHER_ID)) {
-      const launcher = document.createElement("button");
-      launcher.id = CHANNEL_LAUNCHER_ID;
-      launcher.className = "channel-talk-raised-launcher";
-      launcher.type = "button";
-      launcher.setAttribute("aria-label", "OFFSET 상담 열기");
-      document.body.appendChild(launcher);
-    }
 
     if (!channelWindow.ChannelIO) {
       const channel = function (...args: unknown[]) {
@@ -53,17 +43,34 @@ export default function ChannelTalk() {
       document.head.appendChild(script);
     }
 
-    channelWindow.ChannelIO?.("boot", {
-      pluginKey: CHANNEL_PLUGIN_KEY,
-      ...(useRaisedLauncher
-        ? { customLauncherSelector: `#${CHANNEL_LAUNCHER_ID}` }
-        : {}),
-    });
+    channelWindow.ChannelIO?.("boot", { pluginKey: CHANNEL_PLUGIN_KEY });
+
+    let launcherObserver: MutationObserver | undefined;
+    let launcherAttempts = 0;
+    const raiseLauncher = () => {
+      const host = document.querySelector<HTMLDivElement>("#ch-plugin-entry > div");
+      const shadowRoot = host?.shadowRoot;
+      const launcherWrapper = shadowRoot?.querySelector("button")?.parentElement;
+      if (!launcherWrapper) return;
+      launcherWrapper.style.setProperty("bottom", "80px", "important");
+      if (!launcherObserver && shadowRoot) {
+        launcherObserver = new MutationObserver(raiseLauncher);
+        launcherObserver.observe(shadowRoot, { childList: true, subtree: true });
+      }
+    };
+    const launcherInterval = shouldRaiseLauncher
+      ? window.setInterval(() => {
+          raiseLauncher();
+          launcherAttempts += 1;
+          if (launcherAttempts >= 50) window.clearInterval(launcherInterval);
+        }, 200)
+      : undefined;
 
     return () => {
       channelWindow.ChannelIO?.("shutdown");
       document.getElementById(CHANNEL_SCRIPT_ID)?.remove();
-      document.getElementById(CHANNEL_LAUNCHER_ID)?.remove();
+      if (launcherInterval !== undefined) window.clearInterval(launcherInterval);
+      launcherObserver?.disconnect();
       channelWindow.ChannelIOInitialized = false;
     };
   }, []);

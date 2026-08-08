@@ -9,6 +9,15 @@ const siteOrigin = process.argv[2] || "http://127.0.0.1:3000";
 const basePath = "";
 const tawkChat = String.raw`(() => {
   if (document.getElementById("tawk-to-widget")) return;
+  window.Tawk_API = window.Tawk_API || {};
+  if (/^\/(workshop|apply)(?:\/|$)/.test(location.pathname)) {
+    window.Tawk_API.customStyle = {
+      visibility: {
+        desktop: {position:"br",xOffset:20,yOffset:80},
+        mobile: {position:"br",xOffset:20,yOffset:80}
+      }
+    };
+  }
   const script = document.createElement("script");
   script.id = "tawk-to-widget";
   script.async = true;

@@ -7,24 +7,23 @@ const outputDir = path.join(projectRoot, "docs");
 const clientDir = path.join(projectRoot, "dist", "client");
 const siteOrigin = process.argv[2] || "http://127.0.0.1:3000";
 const basePath = "";
-const tawkChat = String.raw`(() => {
-  if (document.getElementById("tawk-to-widget")) return;
-  window.Tawk_API = window.Tawk_API || {};
-  if (/^\/(workshop|apply)(?:\/|$)/.test(location.pathname)) {
-    window.Tawk_API.customStyle = {
-      visibility: {
-        desktop: {position:"br",xOffset:20,yOffset:80},
-        mobile: {position:"br",xOffset:20,yOffset:80}
-      }
-    };
-  }
+const channelPluginKey =
+  process.env.NEXT_PUBLIC_CHANNEL_PLUGIN_KEY ||
+  "a55a2e4a-90f1-463f-b9ca-317c14fe1f8e";
+const channelTalk = String.raw`(() => {
+  const pluginKey = ${JSON.stringify(channelPluginKey)};
+  if (!pluginKey || window.ChannelIOInitialized) return;
+  const channel = function(){ channel.c(arguments); };
+  channel.q = [];
+  channel.c = args => channel.q.push(args);
+  window.ChannelIO = channel;
+  window.ChannelIOInitialized = true;
   const script = document.createElement("script");
-  script.id = "tawk-to-widget";
+  script.id = "channel-talk-widget";
   script.async = true;
-  script.src = "https://embed.tawk.to/6a7728357e01e61d477734a2/1jvgsfmhq";
-  script.charset = "UTF-8";
-  script.crossOrigin = "anonymous";
-  document.body.appendChild(script);
+  script.src = "https://cdn.channel.io/plugin/ch-plugin-web.js";
+  document.head.appendChild(script);
+  channel("boot", {pluginKey});
 })();`;
 
 const homeMotion = String.raw`(() => {
@@ -242,7 +241,7 @@ function transformHtml(html, route) {
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
     .replace(/<link\b[^>]*rel=["']modulepreload["'][^>]*>/gi, "")
     .replace(/=(['"])\/(?!\/)/g, `=$1${basePath}/`)
-    .replace("</body>", `${controller ? `<script>${controller}</script>` : ""}<script>${tawkChat}</script></body>`);
+    .replace("</body>", `${controller ? `<script>${controller}</script>` : ""}<script>${channelTalk}</script></body>`);
 }
 
 await rm(outputDir, { recursive: true, force: true });

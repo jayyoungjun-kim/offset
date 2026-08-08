@@ -6,21 +6,17 @@
   const update = () => cta.classList.toggle("is-docked", slot.getBoundingClientRect().top <= innerHeight - slot.offsetHeight - 20);
   update(); addEventListener("scroll", update, {passive:true}); addEventListener("resize", update);
 })();</script><script>(() => {
-  if (document.getElementById("tawk-to-widget")) return;
-  window.Tawk_API = window.Tawk_API || {};
-  if (/^\/(workshop|apply)(?:\/|$)/.test(location.pathname)) {
-    window.Tawk_API.customStyle = {
-      visibility: {
-        desktop: {position:"br",xOffset:20,yOffset:80},
-        mobile: {position:"br",xOffset:20,yOffset:80}
-      }
-    };
-  }
+  const pluginKey = "a55a2e4a-90f1-463f-b9ca-317c14fe1f8e";
+  if (!pluginKey || window.ChannelIOInitialized) return;
+  const channel = function(){ channel.c(arguments); };
+  channel.q = [];
+  channel.c = args => channel.q.push(args);
+  window.ChannelIO = channel;
+  window.ChannelIOInitialized = true;
   const script = document.createElement("script");
-  script.id = "tawk-to-widget";
+  script.id = "channel-talk-widget";
   script.async = true;
-  script.src = "https://embed.tawk.to/6a7728357e01e61d477734a2/1jvgsfmhq";
-  script.charset = "UTF-8";
-  script.crossOrigin = "anonymous";
-  document.body.appendChild(script);
+  script.src = "https://cdn.channel.io/plugin/ch-plugin-web.js";
+  document.head.appendChild(script);
+  channel("boot", {pluginKey});
 })();</script></body></html>

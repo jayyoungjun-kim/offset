@@ -8,11 +8,14 @@
 })();</script><script>(() => {
   if (document.getElementById("tawk-to-widget")) return;
   window.Tawk_API = window.Tawk_API || {};
-  const launcher = document.createElement("button");
-  launcher.type = "button";
-  launcher.className = "tawk-launcher";
-  launcher.setAttribute("aria-label", "라이브 채팅 열기");
-  launcher.innerHTML = '<span aria-hidden="true"></span>';
+  const launcher = document.querySelector(".tawk-launcher") || document.createElement("button");
+  if (!launcher.isConnected) {
+    launcher.type = "button";
+    launcher.className = "tawk-launcher";
+    launcher.setAttribute("aria-label", "라이브 채팅 열기");
+    launcher.innerHTML = '<span aria-hidden="true"></span>';
+    document.body.appendChild(launcher);
+  }
   window.Tawk_API.onLoad = () => window.Tawk_API.hideWidget?.();
   window.Tawk_API.onChatMaximized = () => { launcher.hidden = true; };
   window.Tawk_API.onChatMinimized = () => { window.Tawk_API.hideWidget?.(); launcher.hidden = false; };
@@ -21,7 +24,6 @@
     window.Tawk_API.maximize?.();
     launcher.hidden = true;
   });
-  document.body.appendChild(launcher);
   const script = document.createElement("script");
   script.id = "tawk-to-widget";
   script.async = true;

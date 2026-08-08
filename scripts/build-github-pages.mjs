@@ -6,7 +6,7 @@ const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "
 const outputDir = path.join(projectRoot, "docs");
 const clientDir = path.join(projectRoot, "dist", "client");
 const siteOrigin = process.argv[2] || "http://127.0.0.1:3000";
-const basePath = "/offset";
+const basePath = "";
 
 const homeMotion = String.raw`(() => {
   const stage = document.querySelector(".home-stage");
@@ -194,7 +194,7 @@ const applicationForm = String.raw`(() => {
       const response = await fetch(apiUrl, {method:"POST",credentials:"include",headers:{"content-type":"application/json"},body:JSON.stringify({...values,file:storedFile})});
       const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.error || "신청서를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.");
-      location.assign("/offset/apply/complete/");
+      location.assign("/apply/complete/");
     } catch (error) {
       showSubmitError(error instanceof Error ? error.message : "신청서를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.");
       submitButton.disabled = false; submitButton.textContent = "신청서 제출하기";

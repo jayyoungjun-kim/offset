@@ -1,5 +1,5 @@
 const MAX_FILE_SIZE = 20 * 1024 * 1024;
-const GITHUB_PAGES_ORIGIN = "https://jayyoungjun-kim.github.io";
+const GITHUB_PAGES_ORIGIN = "https://offset.quest";
 
 function jsonResponse(body: unknown, init: ResponseInit = {}) {
   const headers = new Headers(init.headers);

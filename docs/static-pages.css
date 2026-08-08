@@ -1,0 +1,8 @@
+.typing-intro-placeholder {
+  position: static !important;
+  visibility: visible !important;
+}
+
+.typing-intro-text {
+  display: none !important;
+}

@@ -5,7 +5,7 @@ import Link from "next/link";
 import SiteHeader from "../site-header";
 import StickySubmitButton from "./sticky-submit-button";
 import { useRouter } from "next/navigation";
-import { DragEvent, FormEvent, useRef, useState } from "react";
+import { DragEvent, FormEvent, useEffect, useRef, useState } from "react";
 
 const careers = ["1년 미만", "1~3년", "4~7년", "7년 이상"];
 const commitments = ["가능해요.", "어려울 수도 있어요."];
@@ -13,8 +13,27 @@ const conditions = ["오프라인 참석 가능합니다.", "기존 포트폴리
 const availability = ["월요일 19:30 ~ 22:00", "수요일 19:30 ~ 22:00", "목요일 19:30 ~ 22:00", "금요일 19:30 ~ 22:00", "토요일 10:00 ~ 12:30", "토요일 14:00 ~ 16:30", "토요일 18:00 ~ 20:30", "일요일 10:00 ~ 12:30", "일요일 14:00 ~ 16:30", "일요일 18:00 ~ 20:30"];
 const MAX_FILE_SIZE = 20 * 1024 * 1024;
 type Errors = Partial<Record<"name"|"phone"|"email"|"career"|"portfolio"|"concern"|"commitment"|"conditions"|"availability", string>>;
+type StoredFile = { id:string; name:string; url:string; size:number; type:string };
 
 function ErrorText({message}:{message?:string}) { return message ? <p className="error-text" role="alert">{message}</p> : null; }
+
+async function uploadPortfolio(file:File, uploadUrl:string):Promise<StoredFile> {
+  const headers={"content-type":file.type||"application/octet-stream"};
+  try {
+    const response=await fetch(uploadUrl,{method:"PUT",headers,body:file});
+    const result=await response.json().catch(()=>({})) as {id?:string;name?:string;webViewLink?:string;error?:{message?:string}};
+    if(!response.ok||!result.id) throw new Error(result.error?.message||"포트폴리오 파일 업로드에 실패했습니다.");
+    return {id:result.id,name:result.name||file.name,url:result.webViewLink||`https://drive.google.com/open?id=${result.id}`,size:file.size,type:file.type||"application/octet-stream"};
+  } catch(error) {
+    // Some browsers or managed networks block direct cross-origin uploads.
+    // Preserve the existing server proxy as a reliable fallback in that case.
+    if(!(error instanceof TypeError)) throw error;
+    const response=await fetch("/api/applications",{method:"PUT",headers:{...headers,"x-file-size":String(file.size),"x-upload-session":uploadUrl},body:file});
+    const result=await response.json().catch(()=>({})) as {file?:StoredFile;error?:string};
+    if(!response.ok||!result.file) throw new Error(result.error||"포트폴리오 파일 업로드에 실패했습니다.");
+    return result.file;
+  }
+}
 
 export default function ApplyPage(){
   const router = useRouter();
@@ -29,6 +48,8 @@ export default function ApplyPage(){
   const [errors,setErrors]=useState<Errors>({});
   const [submitError,setSubmitError]=useState("");
   const [isSubmitting,setIsSubmitting]=useState(false);
+
+  useEffect(()=>{router.prefetch("/apply/complete");},[router]);
 
   function toggle(value:string, values:string[], setter:(next:string[])=>void){setter(values.includes(value)?values.filter(item=>item!==value):[...values,value]);}
   function acceptFile(next?:File){
@@ -59,16 +80,13 @@ export default function ApplyPage(){
         const initResponse=await fetch("/api/applications",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"initUpload",name:file.name,type:file.type||"application/octet-stream",size:file.size,applicantName:String(data.get("name")||"")})});
         const initResult=await initResponse.json().catch(()=>({})) as {uploadUrl?:string;error?:string};
         if(!initResponse.ok||!initResult.uploadUrl) throw new Error(initResult.error||"파일 업로드를 준비하지 못했습니다.");
-        const uploadResponse=await fetch("/api/applications",{method:"PUT",headers:{"content-type":file.type||"application/octet-stream","x-file-size":String(file.size),"x-upload-session":initResult.uploadUrl},body:file});
-        const uploadResult=await uploadResponse.json().catch(()=>({})) as {file?:{id:string;name:string;url:string;size:number;type:string};error?:string};
-        if(!uploadResponse.ok||!uploadResult.file) throw new Error(uploadResult.error||"포트폴리오 파일 업로드에 실패했습니다.");
-        storedFile=uploadResult.file;
+        storedFile=await uploadPortfolio(file,initResult.uploadUrl);
       }
       const payload={name:String(data.get("name")||""),phone:String(data.get("phone")||""),email:String(data.get("email")||""),career,portfolioLink:String(data.get("portfolioLink")||""),concern:String(data.get("concern")||""),commitment,conditions:checkedConditions,availability:checkedTimes,file:storedFile};
       const response=await fetch("/api/applications",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
       const result=await response.json().catch(()=>({})) as {error?:string};
       if(!response.ok) throw new Error(result.error||"신청서를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.");
-      router.push("/apply/complete");
+      router.replace("/apply/complete");
     } catch(error) {
       setSubmitError(error instanceof Error?error.message:"신청서를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.");
     } finally {

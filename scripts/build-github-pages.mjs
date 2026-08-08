@@ -10,22 +10,14 @@ const basePath = "";
 const tawkChat = String.raw`(() => {
   if (document.getElementById("tawk-to-widget")) return;
   window.Tawk_API = window.Tawk_API || {};
-  const launcher = document.querySelector(".tawk-launcher") || document.createElement("button");
-  if (!launcher.isConnected) {
-    launcher.type = "button";
-    launcher.className = "tawk-launcher";
-    launcher.setAttribute("aria-label", "라이브 채팅 열기");
-    launcher.innerHTML = '<span aria-hidden="true"></span>';
-    document.body.appendChild(launcher);
+  if (/^\/(workshop|apply)(?:\/|$)/.test(location.pathname)) {
+    window.Tawk_API.customStyle = {
+      visibility: {
+        desktop: {position:"br",xOffset:20,yOffset:80},
+        mobile: {position:"br",xOffset:20,yOffset:80}
+      }
+    };
   }
-  window.Tawk_API.onLoad = () => window.Tawk_API.hideWidget?.();
-  window.Tawk_API.onChatMaximized = () => { launcher.hidden = true; };
-  window.Tawk_API.onChatMinimized = () => { window.Tawk_API.hideWidget?.(); launcher.hidden = false; };
-  launcher.addEventListener("click", () => {
-    window.Tawk_API.showWidget?.();
-    window.Tawk_API.maximize?.();
-    launcher.hidden = true;
-  });
   const script = document.createElement("script");
   script.id = "tawk-to-widget";
   script.async = true;

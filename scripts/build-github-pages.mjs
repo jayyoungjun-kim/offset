@@ -7,6 +7,16 @@ const outputDir = path.join(projectRoot, "docs");
 const clientDir = path.join(projectRoot, "dist", "client");
 const siteOrigin = process.argv[2] || "http://127.0.0.1:3000";
 const basePath = "";
+const tawkChat = String.raw`(() => {
+  if (document.getElementById("tawk-to-widget")) return;
+  const script = document.createElement("script");
+  script.id = "tawk-to-widget";
+  script.async = true;
+  script.src = "https://embed.tawk.to/6a7728357e01e61d477734a2/1jvgna52b";
+  script.charset = "UTF-8";
+  script.crossOrigin = "anonymous";
+  document.body.appendChild(script);
+})();`;
 
 const homeMotion = String.raw`(() => {
   const stage = document.querySelector(".home-stage");
@@ -223,7 +233,7 @@ function transformHtml(html, route) {
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
     .replace(/<link\b[^>]*rel=["']modulepreload["'][^>]*>/gi, "")
     .replace(/=(['"])\/(?!\/)/g, `=$1${basePath}/`)
-    .replace("</body>", `${controller ? `<script>${controller}</script>` : ""}</body>`);
+    .replace("</body>", `${controller ? `<script>${controller}</script>` : ""}<script>${tawkChat}</script></body>`);
 }
 
 await rm(outputDir, { recursive: true, force: true });

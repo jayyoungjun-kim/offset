@@ -5,4 +5,13 @@
   if (!slot || !cta) return;
   const update = () => cta.classList.toggle("is-docked", slot.getBoundingClientRect().top <= innerHeight - slot.offsetHeight - 20);
   update(); addEventListener("scroll", update, {passive:true}); addEventListener("resize", update);
+})();</script><script>(() => {
+  if (document.getElementById("tawk-to-widget")) return;
+  const script = document.createElement("script");
+  script.id = "tawk-to-widget";
+  script.async = true;
+  script.src = "https://embed.tawk.to/6a7728357e01e61d477734a2/1jvgna52b";
+  script.charset = "UTF-8";
+  script.crossOrigin = "anonymous";
+  document.body.appendChild(script);
 })();</script></body></html>

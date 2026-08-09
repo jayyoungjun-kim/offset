@@ -92,6 +92,31 @@ actions tied to the current ChatGPT user. Leave public content anonymous.
 - `npm test`: build the starter and verify its rendered loading skeleton
 - `npm run db:generate`: generate Drizzle migrations after schema changes
 
+## Application notifications
+
+The Google Apps Script in `scripts/google-apps-script.gs` sends an email and an
+SMS after a new application is written to the spreadsheet. Configure these
+values under **Apps Script → Project Settings → Script Properties**:
+
+- `NOTIFICATION_EMAIL`: recipient email address
+- `NOTIFICATION_PHONE`: recipient mobile number (digits or hyphenated form)
+- `SOLAPI_SENDER_NUMBER`: a sender number registered with SOLAPI
+- `SOLAPI_API_KEY`: SOLAPI API key
+- `SOLAPI_API_SECRET`: SOLAPI API secret
+
+Redeploy the Apps Script web app after updating the script. Notification errors
+are logged without discarding an application that was already saved.
+
+## Analytics
+
+Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` to a Google Analytics measurement ID such
+as `G-XXXXXXXXXX`. Page views are collected automatically. The header
+navigation sends a `navigation_click` event with these parameters:
+
+- `navigation_location`: `header`
+- `navigation_item`: `about` or `workshop`
+- `link_url`: the destination path
+
 ## Learn More
 
 - [vinext Documentation](https://github.com/cloudflare/vinext)

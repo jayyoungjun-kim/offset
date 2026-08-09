@@ -8,7 +8,7 @@
     const link = event.target.closest(".nav-menu a");
     if (!link) return;
     const destination = new URL(link.href, location.href).pathname;
-    const item = destination === "/about" ? "about" : destination === "/workshop" ? "workshop" : "";
+    const item = link.classList.contains("nav-logo") ? "logo" : destination === "/about" ? "about" : destination === "/workshop" ? "workshop" : "";
     if (item) gtag("event", "navigation_click", {navigation_location:"header",navigation_item:item,link_url:destination});
   });
 })();</script><script>(() => {
@@ -60,6 +60,9 @@
   script.src = "https://cdn.channel.io/plugin/ch-plugin-web.js";
   document.head.appendChild(script);
   channel("boot", {pluginKey});
+  channel("onShowMessenger", () => {
+    window.gtag?.("event", "channel_talk_open", {page_path:location.pathname});
+  });
   if (shouldRaiseLauncher) {
     let observer;
     let attempts = 0;

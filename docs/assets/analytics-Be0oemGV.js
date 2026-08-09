@@ -1,0 +1,1 @@
+function e(e,t={}){typeof window>`u`||(window.dataLayer=window.dataLayer||[],window.dataLayer.push({event:e,...t}),window.gtag?.(`event`,e,t))}export{e as t};

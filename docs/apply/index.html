@@ -8,7 +8,7 @@
     const link = event.target.closest(".nav-menu a");
     if (!link) return;
     const destination = new URL(link.href, location.href).pathname;
-    const item = destination === "/about" ? "about" : destination === "/workshop" ? "workshop" : "";
+    const item = link.classList.contains("nav-logo") ? "logo" : destination === "/about" ? "about" : destination === "/workshop" ? "workshop" : "";
     if (item) gtag("event", "navigation_click", {navigation_location:"header",navigation_item:item,link_url:destination});
   });
 })();</script><script>(() => {
@@ -23,6 +23,15 @@
   const concern = form.querySelector('[name="concern"]');
   const characterCount = form.querySelector(".character-count");
   const submitButton = form.querySelector('.submit-button');
+  let hasStarted = false;
+  const track = (event, properties = {}) => window.gtag?.("event", event, properties);
+  const trackStart = () => {
+    if (hasStarted) return;
+    hasStarted = true;
+    track("application_start", {form_name:"portfolio_workshop"});
+  };
+  form.addEventListener("input", trackStart);
+  form.addEventListener("change", trackStart);
 
   const fieldFor = name => form.querySelector('[name="' + name + '"]')?.closest(".field") || form.querySelector('[aria-labelledby="' + name + '-label"]');
   const clearError = name => {
@@ -73,6 +82,7 @@
     }
     if (uploadCopy) uploadCopy.textContent = file.name;
     if (uploadNote) uploadNote.textContent = "파일이 첨부되었습니다.";
+    track("portfolio_upload", {file_type:file.type || "unknown"});
   });
   upload?.addEventListener("dragover", event => { event.preventDefault(); upload.classList.add("is-dragging"); });
   upload?.addEventListener("dragleave", () => upload.classList.remove("is-dragging"));
@@ -123,9 +133,13 @@
     if (conditions.length !== 3) errors.push(["conditions","참여 조건을 모두 확인하고 선택해 주세요."]);
     if (availability.length === 0) errors.push(["availability","가능한 시간대를 한 개 이상 선택해 주세요."]);
     errors.forEach(([name,message]) => showError(name,message));
-    if (errors.length) { fieldFor(errors[0][0])?.scrollIntoView({behavior:"smooth",block:"center"}); return; }
+    if (errors.length) {
+      track("application_validation_error", {error_count:errors.length,first_error:errors[0][0]});
+      fieldFor(errors[0][0])?.scrollIntoView({behavior:"smooth",block:"center"}); return;
+    }
 
     clearSubmitError(); submitButton.disabled = true;
+    track("application_submit", {form_name:"portfolio_workshop",has_file:!!file,has_portfolio_link:!!values.portfolioLink});
     submitButton.innerHTML = '<span class="submitting-label">제출 중<span class="submitting-dots" aria-hidden="true"><i>.</i><i>.</i><i>.</i></span></span>';
     try {
       let storedFile = null;
@@ -138,8 +152,10 @@
       const response = await fetch(apiUrl, {method:"POST",credentials:"include",headers:{"content-type":"application/json"},body:JSON.stringify({...values,file:storedFile})});
       const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.error || "신청서를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.");
+      track("application_complete", {form_name:"portfolio_workshop"});
       location.assign("/apply/complete/");
     } catch (error) {
+      track("application_submit_error", {form_name:"portfolio_workshop"});
       showSubmitError(error instanceof Error ? error.message : "신청서를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.");
       submitButton.disabled = false; submitButton.textContent = "신청서 제출하기";
     }
@@ -166,6 +182,9 @@
   script.src = "https://cdn.channel.io/plugin/ch-plugin-web.js";
   document.head.appendChild(script);
   channel("boot", {pluginKey});
+  channel("onShowMessenger", () => {
+    window.gtag?.("event", "channel_talk_open", {page_path:location.pathname});
+  });
   if (shouldRaiseLauncher) {
     let observer;
     let attempts = 0;

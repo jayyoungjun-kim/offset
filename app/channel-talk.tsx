@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { trackEvent } from "./analytics";
 
 const CHANNEL_SCRIPT_ID = "channel-talk-widget";
 const CHANNEL_SCRIPT_URL = "https://cdn.channel.io/plugin/ch-plugin-web.js";
@@ -44,6 +45,9 @@ export default function ChannelTalk() {
     }
 
     channelWindow.ChannelIO?.("boot", { pluginKey: CHANNEL_PLUGIN_KEY });
+    channelWindow.ChannelIO?.("onShowMessenger", () => {
+      trackEvent("channel_talk_open", { page_path: window.location.pathname });
+    });
 
     let launcherObserver: MutationObserver | undefined;
     let launcherAttempts = 0;

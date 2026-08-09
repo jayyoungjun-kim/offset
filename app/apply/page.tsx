@@ -6,6 +6,7 @@ import SiteHeader from "../site-header";
 import StickySubmitButton from "./sticky-submit-button";
 import { useRouter } from "next/navigation";
 import { DragEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { trackEvent } from "../analytics";
 
 const careers = ["1년 미만", "1~3년", "4~7년", "7년 이상"];
 const commitments = ["가능해요.", "어려울 수도 있어요."];
@@ -38,6 +39,7 @@ async function uploadPortfolio(file:File, uploadUrl:string):Promise<StoredFile> 
 export default function ApplyPage(){
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
+  const hasStartedRef = useRef(false);
   const [file,setFile]=useState<File|null>(null);
   const [isDragging,setIsDragging]=useState(false);
   const [career,setCareer]=useState("");
@@ -52,10 +54,16 @@ export default function ApplyPage(){
   useEffect(()=>{router.prefetch("/apply/complete");},[router]);
 
   function toggle(value:string, values:string[], setter:(next:string[])=>void){setter(values.includes(value)?values.filter(item=>item!==value):[...values,value]);}
+  function trackApplicationStart(){
+    if(hasStartedRef.current) return;
+    hasStartedRef.current=true;
+    trackEvent("application_start",{form_name:"portfolio_workshop"});
+  }
   function acceptFile(next?:File){
     if(!next) return false;
     if(next.size>MAX_FILE_SIZE){setFile(null);setErrors(prev=>({...prev,portfolio:"파일 용량은 최대 20MB까지 첨부할 수 있습니다."}));return false;}
-    setFile(next);setErrors(prev=>({...prev,portfolio:undefined}));return true;
+    setFile(next);setErrors(prev=>({...prev,portfolio:undefined}));
+    trackEvent("portfolio_upload",{file_type:next.type||"unknown"});return true;
   }
   function drop(e:DragEvent<HTMLLabelElement>){e.preventDefault();setIsDragging(false);acceptFile(e.dataTransfer.files?.[0]);}
   async function submit(e:FormEvent<HTMLFormElement>){
@@ -71,9 +79,10 @@ export default function ApplyPage(){
     if(checkedConditions.length!==conditions.length) next.conditions="참여 조건을 모두 확인하고 선택해 주세요.";
     if(checkedTimes.length===0) next.availability="가능한 시간대를 한 개 이상 선택해 주세요.";
     setErrors(next);
-    if(Object.keys(next).length){requestAnimationFrame(()=>formRef.current?.querySelector<HTMLElement>("[aria-invalid='true']")?.focus());return;}
+    if(Object.keys(next).length){trackEvent("application_validation_error",{error_count:Object.keys(next).length,first_error:Object.keys(next)[0]||"unknown"});requestAnimationFrame(()=>formRef.current?.querySelector<HTMLElement>("[aria-invalid='true']")?.focus());return;}
     setSubmitError("");
     setIsSubmitting(true);
+    trackEvent("application_submit",{form_name:"portfolio_workshop",has_file:!!file,has_portfolio_link:!!String(data.get("portfolioLink")||"").trim()});
     try {
       let storedFile=null;
       if(file){
@@ -86,8 +95,10 @@ export default function ApplyPage(){
       const response=await fetch("/api/applications",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
       const result=await response.json().catch(()=>({})) as {error?:string};
       if(!response.ok) throw new Error(result.error||"신청서를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.");
+      trackEvent("application_complete",{form_name:"portfolio_workshop"});
       router.replace("/apply/complete");
     } catch(error) {
+      trackEvent("application_submit_error",{form_name:"portfolio_workshop"});
       setSubmitError(error instanceof Error?error.message:"신청서를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.");
     } finally {
       setIsSubmitting(false);
@@ -96,7 +107,7 @@ export default function ApplyPage(){
   return <main className="form-page">
     <SiteHeader />
     <div className="container form-wrap"><Link className="back-link" href="/workshop">←뒤로가기</Link>
-      <form ref={formRef} className="application-form" onSubmit={submit} noValidate>
+      <form ref={formRef} className="application-form" onSubmit={submit} onInput={trackApplicationStart} onChange={trackApplicationStart} noValidate>
         <h1>프로덕트 디자이너 포트폴리오 완성반 1기 신청서</h1>
         <div className="field"><label htmlFor="name">이름</label><input className="text-input" id="name" name="name" placeholder="이름" aria-invalid={!!errors.name} onChange={()=>setErrors(p=>({...p,name:undefined}))}/><ErrorText message={errors.name}/></div>
         <div className="field"><label htmlFor="phone">연락처</label><input className="text-input" id="phone" name="phone" type="tel" placeholder="010-1234-5678" aria-invalid={!!errors.phone} onChange={()=>setErrors(p=>({...p,phone:undefined}))}/><ErrorText message={errors.phone}/></div>

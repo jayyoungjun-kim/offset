@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { trackEvent } from "./analytics";
 
 export default function StickyWorkshopCta() {
   const router = useRouter();
@@ -41,6 +42,7 @@ export default function StickyWorkshopCta() {
         onFocus={prefetchApply}
         onPointerEnter={prefetchApply}
         onTouchStart={prefetchApply}
+        onClick={() => trackEvent("apply_cta_click", { cta_location: "workshop", link_url: "/apply" })}
       >워크샵 신청하기</Link>
     </div>
   </div>;

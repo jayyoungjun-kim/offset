@@ -10,7 +10,7 @@ const basePath = "";
 const channelPluginKey =
   process.env.NEXT_PUBLIC_CHANNEL_PLUGIN_KEY ||
   "a55a2e4a-90f1-463f-b9ca-317c14fe1f8e";
-const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-B8K6MH44GD";
 const analytics = gaMeasurementId
   ? String.raw`(() => {
   window.dataLayer = window.dataLayer || [];

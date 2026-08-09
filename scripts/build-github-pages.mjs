@@ -10,6 +10,22 @@ const basePath = "";
 const channelPluginKey =
   process.env.NEXT_PUBLIC_CHANNEL_PLUGIN_KEY ||
   "a55a2e4a-90f1-463f-b9ca-317c14fe1f8e";
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
+const analytics = gaMeasurementId
+  ? String.raw`(() => {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function(){ dataLayer.push(arguments); };
+  gtag("js", new Date());
+  gtag("config", ${JSON.stringify(gaMeasurementId)});
+  document.addEventListener("click", event => {
+    const link = event.target.closest(".nav-menu a");
+    if (!link) return;
+    const destination = new URL(link.href, location.href).pathname;
+    const item = destination === "/about" ? "about" : destination === "/workshop" ? "workshop" : "";
+    if (item) gtag("event", "navigation_click", {navigation_location:"header",navigation_item:item,link_url:destination});
+  });
+})();`
+  : "";
 const channelTalk = String.raw`(() => {
   const pluginKey = ${JSON.stringify(channelPluginKey)};
   if (!pluginKey || window.ChannelIOInitialized) return;
@@ -261,7 +277,8 @@ function transformHtml(html, route) {
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
     .replace(/<link\b[^>]*rel=["']modulepreload["'][^>]*>/gi, "")
     .replace(/=(['"])\/(?!\/)/g, `=$1${basePath}/`)
-    .replace("</body>", `${controller ? `<script>${controller}</script>` : ""}<script>${channelTalk}</script></body>`);
+    .replace("</head>", `${gaMeasurementId ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}"></script>` : ""}</head>`)
+    .replace("</body>", `${analytics ? `<script>${analytics}</script>` : ""}${controller ? `<script>${controller}</script>` : ""}<script>${channelTalk}</script></body>`);
 }
 
 await rm(outputDir, { recursive: true, force: true });

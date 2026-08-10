@@ -6,10 +6,6 @@ const SHEET_ID = SCRIPT_PROPERTIES.getProperty("SHEET_ID");
 const DRIVE_FOLDER_ID = SCRIPT_PROPERTIES.getProperty("DRIVE_FOLDER_ID");
 const FORM_SUBMIT_SECRET = SCRIPT_PROPERTIES.getProperty("FORM_SUBMIT_SECRET");
 const NOTIFICATION_EMAIL = SCRIPT_PROPERTIES.getProperty("NOTIFICATION_EMAIL");
-const NOTIFICATION_PHONE = SCRIPT_PROPERTIES.getProperty("NOTIFICATION_PHONE");
-const SOLAPI_SENDER_NUMBER = SCRIPT_PROPERTIES.getProperty("SOLAPI_SENDER_NUMBER");
-const SOLAPI_API_KEY = SCRIPT_PROPERTIES.getProperty("SOLAPI_API_KEY");
-const SOLAPI_API_SECRET = SCRIPT_PROPERTIES.getProperty("SOLAPI_API_SECRET");
 const MAX_FILE_SIZE = 20 * 1024 * 1024;
 const HEADERS = ["제출 ID","제출 시각","이름","연락처","이메일","경력","포트폴리오 링크","첨부 파일명","Drive 파일 링크","현재 고민","수정 시간 확보","참여 조건","가능 시간대"];
 
@@ -19,43 +15,6 @@ function jsonResponse(data) {
 
 function safeFileName(value) {
   return String(value || "portfolio").replace(/[\\/:*?"<>|]/g, "_");
-}
-
-function normalizePhone(value) {
-  return String(value || "").replace(/[^0-9]/g, "");
-}
-
-function bytesToHex(bytes) {
-  return bytes.map(function(byte) {
-    const value = byte < 0 ? byte + 256 : byte;
-    return ("0" + value.toString(16)).slice(-2);
-  }).join("");
-}
-
-function sendSms(text) {
-  if (!NOTIFICATION_PHONE || !SOLAPI_SENDER_NUMBER || !SOLAPI_API_KEY || !SOLAPI_API_SECRET) {
-    throw new Error("문자 알림 설정이 완료되지 않았습니다.");
-  }
-  const date = new Date().toISOString();
-  const salt = Utilities.getUuid().replace(/-/g, "");
-  const signature = bytesToHex(Utilities.computeHmacSha256Signature(date + salt, SOLAPI_API_SECRET, Utilities.Charset.UTF_8));
-  const response = UrlFetchApp.fetch("https://api.solapi.com/messages/v4/send-many/detail", {
-    method: "post",
-    contentType: "application/json; charset=UTF-8",
-    headers: {
-      Authorization: "HMAC-SHA256 apiKey=" + SOLAPI_API_KEY + ", date=" + date + ", salt=" + salt + ", signature=" + signature,
-    },
-    payload: JSON.stringify({
-      messages: [{
-        to: normalizePhone(NOTIFICATION_PHONE),
-        from: normalizePhone(SOLAPI_SENDER_NUMBER),
-        text: text,
-      }],
-    }),
-    muteHttpExceptions: true,
-  });
-  const status = response.getResponseCode();
-  if (status < 200 || status >= 300) throw new Error("SOLAPI 문자 발송 실패: " + response.getContentText());
 }
 
 function notifyApplication(payload) {
@@ -73,19 +32,13 @@ function notifyApplication(payload) {
     "제출 ID: " + payload.submissionId,
   ].join("\n");
 
-  const results = { email: false, sms: false };
+  const results = { email: false };
   try {
     if (!NOTIFICATION_EMAIL) throw new Error("이메일 알림 설정이 완료되지 않았습니다.");
     MailApp.sendEmail({ to: NOTIFICATION_EMAIL, subject: subject, body: body, name: "OFFSET 신청 알림" });
     results.email = true;
   } catch (error) {
     console.error("Application email notification failed", error);
-  }
-  try {
-    sendSms("[OFFSET] " + payload.name + "님의 신청서가 접수되었습니다. (" + submittedAt + ")");
-    results.sms = true;
-  } catch (error) {
-    console.error("Application SMS notification failed", error);
   }
   return results;
 }

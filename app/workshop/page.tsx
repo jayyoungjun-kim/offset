@@ -110,7 +110,7 @@ export default function Home() {
         <dl className="workshop-summary">
           <div>
             <dt>모집 기간</dt>
-            <dd>선착순 모집 중</dd>
+            <dd>선착순 모집 중 (모집 완료 즉시 마감)</dd>
           </div>
           <div>
             <dt>진행 방식</dt>

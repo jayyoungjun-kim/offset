@@ -97,6 +97,8 @@ function doPost(e) {
 }
 
 function authorizeSetup() {
+  MailApp.getRemainingDailyQuota();
+
   UrlFetchApp.fetch(
     "https://www.googleapis.com/drive/v3/about?fields=user",
     {

@@ -1,6 +1,37 @@
+import type { Metadata } from "next";
 import StickyWorkshopCta from "../sticky-workshop-cta";
 import SiteHeader from "../site-header";
 import SiteFooter from "../site-footer";
+
+const title = "프로덕트 디자이너 포트폴리오 완성반";
+const description = "디자이너의 실무와 성장을 위한 OFFSET의 다양한 디자인 워크숍을 만나보세요.";
+
+export const metadata: Metadata = {
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    url: "/workshop",
+    siteName: "OFFSET",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "OFFSET — Design Learning Platform",
+      },
+    ],
+    locale: "ko_KR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: ["/og-image.png"],
+  },
+};
 
 const workshopInfo = [
   ["진행 방식", "매주 피드백을 다음 회차 전까지 반영"],

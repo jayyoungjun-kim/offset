@@ -19,7 +19,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "OFFSET — Design Learning Platform",
+        alt: "OFFSET | Design Learning Platform",
       },
     ],
     locale: "ko_KR",

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     apple: "/favicon.png",
   },
   openGraph: {
-    title: "OFFSET — Design Learning Platform",
+    title: "OFFSET | Design Learning Platform",
     description: "디자이너가 배우고, 성장하고, 변화하는 방식을 탐구합니다.",
     url: "https://offset.quest",
     siteName: "OFFSET",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "OFFSET — Design Learning Platform",
+        alt: "OFFSET | Design Learning Platform",
       },
     ],
     locale: "ko_KR",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "OFFSET — Design Learning Platform",
+    title: "OFFSET | Design Learning Platform",
     description: "디자이너가 배우고, 성장하고, 변화하는 방식을 탐구합니다.",
     images: ["/og-image.png"],
   },

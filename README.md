@@ -1,5 +1,12 @@
 # vinext-starter
 
+## Deployment
+
+OFFSET uses a QA-first release flow. Make and verify changes on the `qa`
+branch and QA site, then merge `qa` into `main` to deploy to
+<https://offset.quest>. See [DEPLOYMENT.md](DEPLOYMENT.md) for the release
+checklist and environment URLs.
+
 A clean full-stack starter running on
 [vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
 Drizzle support.

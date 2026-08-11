@@ -120,19 +120,11 @@ export default function Home() {
           </div>
           <div>
             <dt>모집 현황</dt>
-            <dd>현재 2개 그룹 우선 구성 중 · 추가 그룹 신청 가능</dd>
-          </div>
-          <div>
-            <dt>모집 기간</dt>
-            <dd>접수 순서대로 검토 · 정원 확정 시 마감</dd>
+            <dd>2개 그룹 구성 중 · 추가 신청 가능</dd>
           </div>
           <div>
             <dt>진행 방식</dt>
-            <dd>워크샵 · 오프라인</dd>
-          </div>
-          <div>
-            <dt>진행기간</dt>
-            <dd>4주</dd>
+            <dd>서울 오프라인 · 주 1회, 4주</dd>
           </div>
         </dl>
       </section>

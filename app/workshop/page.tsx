@@ -115,6 +115,14 @@ export default function Home() {
         <h1>프로덕트 디자이너 포트폴리오 완성반</h1>
         <dl className="workshop-summary">
           <div>
+            <dt>모집 인원</dt>
+            <dd>그룹당 4명 · 최대 3개 그룹</dd>
+          </div>
+          <div>
+            <dt>모집 현황</dt>
+            <dd>현재 2개 그룹 우선 구성 중 · 추가 그룹 신청 가능</dd>
+          </div>
+          <div>
             <dt>모집 기간</dt>
             <dd>접수 순서대로 검토 · 정원 확정 시 마감</dd>
           </div>
@@ -125,10 +133,6 @@ export default function Home() {
           <div>
             <dt>진행기간</dt>
             <dd>4주</dd>
-          </div>
-          <div>
-            <dt>모집 현황</dt>
-            <dd>현재 2개 그룹 우선 구성 중 · 추가 그룹 신청 가능</dd>
           </div>
         </dl>
       </section>

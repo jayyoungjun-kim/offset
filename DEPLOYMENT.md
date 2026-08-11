@@ -2,7 +2,7 @@
 
 ## 환경
 
-- QA: <https://portfolio-workshop-1.jayyoungjunkim.chatgpt.site>
+- QA: <https://qa.offset.quest>
 - 운영: <https://offset.quest>
 
 ## 수정과 배포 순서
@@ -15,4 +15,3 @@
 6. `main`에 병합되면 GitHub Pages가 자동으로 운영 사이트 `offset.quest`를 배포한다.
 
 `main` 브랜치에서 직접 수정하지 않는다. QA 승인 전에는 `main`으로 병합하지 않는다.
-

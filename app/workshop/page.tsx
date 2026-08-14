@@ -111,20 +111,20 @@ export default function Home() {
       <article className="container main-content">
       <section className="hero">
         <img className="workshop-hero-icon" src="/workshop-icon-07.png" alt="" width="50" height="50" decoding="async" />
-        <p className="eyebrow">1기 모집중</p>
+        <p className="eyebrow">1기 모집 마감</p>
         <h1>프로덕트 디자이너 포트폴리오 완성반</h1>
         <dl className="workshop-summary">
           <div>
             <dt>모집 인원</dt>
-            <dd>그룹당 최대 4명 · 최대 4개 그룹</dd>
+            <dd>9명 (그룹당 3명)</dd>
           </div>
           <div>
             <dt>모집 현황</dt>
-            <dd>2개 그룹 구성 중 · 추가 신청 가능</dd>
+            <dd>모집 마감</dd>
           </div>
           <div>
             <dt>진행 방식</dt>
-            <dd>서울 오프라인 · 주 1회, 4주</dd>
+            <dd>4주 (주 1회)</dd>
           </div>
         </dl>
       </section>

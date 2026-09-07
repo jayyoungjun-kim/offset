@@ -1,6 +1,5 @@
 "use client";
-import HtmlEditor from "./html-editor";
-import { sectionHtml } from "../lib/detail-html";
+import SectionEditor from "./section-editor";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -473,13 +472,7 @@ export default function AdminConsole({
                     </section>
                     <section>
                       <h2>상세 콘텐츠</h2>
-                      {editing.detailSections?.length ? <>
-                        <p className="of-muted">상세페이지에 표시되는 원문입니다. 제목·문단·목록과 링크를 유지하며 편집해 주세요.</p>
-                        {editing.detailSections.map((section, index) => <div key={section.id} className="of-form">
-                          <label>섹션 제목<input required maxLength={200} value={section.title} onChange={e=>setEditing({...editing,detailSections:editing.detailSections!.map((item,i)=>i===index?{...item,title:e.target.value}:item)})}/></label>
-                          <HtmlEditor value={section.html ?? sectionHtml(section)} onChange={html=>setEditing({...editing,detailSections:editing.detailSections!.map((item,i)=>i===index?{...item,html}:item)})} />
-                        </div>)}
-                      </> : <>
+                      {editing.detailSections !== undefined ? <SectionEditor key={editing.id} sections={editing.detailSections} onChange={detailSections=>setEditing({...editing,detailSections})} /> : <>
                       <button type="button" className="of-button secondary" onClick={()=>setEditing({...editing,detailSections:[
                         {id:"overview",title:"프로그램 소개",body:editing.description},
                         {id:"outcomes",title:"학습 결과",body:editing.outcomes.map(x=>"- "+x).join("\n")},

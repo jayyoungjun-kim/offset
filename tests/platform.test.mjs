@@ -416,6 +416,20 @@ test("workshop detail preserves every original paragraph, list item and FAQ", as
 });
 
 
+test("detail sections can be added, reordered, deleted and cleared without restoring legacy content", async () => {
+ const first={id:"section-first",title:"첫 번째 섹션",body:"",html:"<p>추가한 본문 A</p>"};
+ const second={id:"section-second",title:"두 번째 섹션",body:"",html:"<p>추가한 본문 B</p>"};
+ for(const sections of [[first,second],[second,first],[second],[]]) {
+  const response=await request("/api/admin/programs",{method:"POST",token:adminToken,body:{...p,status:"open",detailSections:sections}});
+  assert.equal(response.status,200);
+  const fetched=await (await request("/api/admin/programs",{token:adminToken})).json();
+  assert.deepEqual(fetched.programs.find(x=>x.id===p.id).detailSections.map(s=>s.id),sections.map(s=>s.id));
+  const html=await (await request("/programs/test-program")).text();
+  const ids=[...html.matchAll(/<section[^>]*id="([^"]+)"[^>]*class="of-original-section"/g)].map(x=>x[1]);
+  assert.deepEqual(ids,sections.map(s=>s.id));
+ }
+});
+
 test("admin HTML round trip renders formatting and removes executable content", async () => {
  const raw='<h3>HTML 편집 제목</h3><p style="text-align: center">보존할 <strong>본문</strong></p><script>alert(1)</script><img src="https://example.test/image.png" onerror="alert(1)"><a href="javascript:alert(1)">링크</a><iframe src="https://example.test"></iframe><table><tr><td>표 내용</td></tr></table>';
  const saved=await request("/api/admin/programs",{method:"POST",token:adminToken,body:{...p,status:"open",detailSections:[{id:"overview",title:"상세 HTML",body:"기존 원문",html:raw}]}});
@@ -431,3 +445,4 @@ test("admin HTML round trip renders formatting and removes executable content", 
  const forbidden=await request("/api/admin/programs",{method:"POST",token:otherToken,body:{...p,detailSections:[{id:"overview",title:"변경",body:"본문",html:raw}]}});
  assert.equal(forbidden.status,403);
 });
+

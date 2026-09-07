@@ -62,7 +62,7 @@ export default async function Detail({
         <article className="of-event-article">
           <div className="of-event-poster"><ProgramCover program={p} /></div>
           <div className="of-event-copy">
-            {p.detailSections?.length ? <DetailCopy sections={p.detailSections} /> : <DetailCopy sections={[
+            {p.detailSections !== undefined ? <DetailCopy sections={p.detailSections} /> : <DetailCopy sections={[
               {id:"overview",title:"프로그램 소개",body:p.description},
               {id:"outcomes",title:"학습 결과",body:p.outcomes.map(x=>"- "+x).join("\n")},
               {id:"audience",title:"참여 대상",body:p.audience.map(x=>"- "+x).join("\n")},

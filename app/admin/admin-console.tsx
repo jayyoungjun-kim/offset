@@ -1,4 +1,5 @@
 "use client";
+import {demoApplications,readDemoApplications,saveDemoStatus} from "../lib/demo-applications";
 import SectionEditor from "./section-editor";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -48,7 +49,7 @@ export default function AdminConsole({
     [section, setSection] = useState<Section>("programs"),
     [programs, setPrograms] = useState<Program[]>(preview ? seedPrograms : []),
     [pages, setPages] = useState<ContentPage[]>([]),
-    [applications, setApplications] = useState<Enrollment[]>([]),
+    [applications, setApplications] = useState<Enrollment[]>(preview ? demoApplications : []),
     [editing, setEditing] = useState<Program | null>(null),
     [pageEditing, setPageEditing] = useState<ContentPage | null>(null),
     [message, setMessage] = useState(""),
@@ -71,7 +72,7 @@ export default function AdminConsole({
     }
   }
   useEffect(() => {
-    if (preview) return;
+    if (preview) {setApplications(readDemoApplications());return;}
     api("/api/auth/session")
       .then((d) => {
         setAccess(d.user?.admin ? "granted" : "denied");
@@ -130,7 +131,7 @@ export default function AdminConsole({
     }
   }
   async function changeStatus(id: string, status: string) {
-    if (preview) return;
+    if (preview) {try{saveDemoStatus(id,status as Enrollment["status"]);setApplications(readDemoApplications());setMessage("샘플 신청 상태를 변경했습니다. 마이페이지 미리보기에서도 확인할 수 있습니다.");}catch{setError("샘플 상태를 저장하지 못했습니다.");}return;}
     setBusy(true);
     setError("");
     try {
@@ -245,8 +246,7 @@ export default function AdminConsole({
         <main>
           {preview && (
             <div className="of-notice">
-              운영 화면 미리보기입니다. 공개된 초기 프로그램만 표시하며 저장 및
-              개인정보 조회는 비활성화되어 있습니다.{" "}
+              가상 신청자가 포함된 운영 화면 미리보기입니다. 샘플 상태 변경은 이 브라우저에만 저장됩니다. 실제 회원 정보는 표시하지 않습니다.{" "}
               <Link href="/admin">운영 콘솔 로그인 ↗</Link>
             </div>
           )}
@@ -532,7 +532,7 @@ export default function AdminConsole({
                           <select
                             aria-label={`${x.name} 신청 상태`}
                             value={x.status}
-                            disabled={busy || preview}
+                            disabled={busy}
                             onChange={(e) => changeStatus(x.id, e.target.value)}
                           >
                             {Object.entries(enrollmentLabel).map(([k, v]) => (
@@ -543,6 +543,8 @@ export default function AdminConsole({
                           </select>
                         </header>
                         <h3>{x.title}</h3>
+                        <p className="of-muted">신청 번호 {x.id} · 회원 ID {x.user_id}</p>
+                        {preview&&<Link href={`/account/preview?member=${encodeURIComponent(x.user_id)}`}>이 회원의 마이페이지 미리보기 ↗</Link>}
                         <p>{x.motivation}</p>
                         <a
                           href={

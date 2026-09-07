@@ -1,0 +1,6 @@
+import {seedPrograms,type Enrollment} from './program-data';
+const p=seedPrograms[0];
+export const demoApplications:Enrollment[]=(['submitted','reviewing','accepted','declined','cancelled'] as const).map((status,i)=>({id:`sample-application-${i+1}`,user_id:`sample-member-${i+1}`,program_id:p.id,name:['김하늘','이서준','박지우','최도윤','정유진'][i]+' (샘플)',email:`sample${i+1}@example.com`,motivation:['프로젝트의 문제 정의와 의사결정 과정을 채용 담당자가 이해할 수 있도록 개선하고 싶습니다.','이직을 준비하며 프로젝트 선택과 포트폴리오 구성에 대한 피드백을 받고 싶습니다.','실무 경험을 바탕으로 제 역할과 성과를 더 명확하게 전달하는 포트폴리오를 만들고 싶습니다.','디자인 과정에서 얻은 인사이트를 일관된 스토리로 정리하는 방법을 배우고 싶습니다.','프로젝트의 우선순위를 정하고 사용자 관점의 문제 해결 과정을 점검하고 싶습니다.'][i],portfolio:`https://example.com/portfolio/sample-${i+1}`,status,created_at:`2026-09-0${7-i}T03:00:00.000Z`,title:p.title}));
+const key='offset-demo-application-status';
+export function readDemoApplications(){try{const saved=JSON.parse(localStorage.getItem(key)||'{}');return demoApplications.map(x=>({...x,status:['submitted','reviewing','accepted','declined','cancelled'].includes(saved[x.id])?saved[x.id]:x.status}));}catch{return demoApplications;}}
+export function saveDemoStatus(id:string,status:Enrollment['status']){const all=readDemoApplications();localStorage.setItem(key,JSON.stringify(Object.fromEntries(all.map(x=>[x.id,x.id===id?status:x.status]))));window.dispatchEvent(new Event('offset-demo-change'));}

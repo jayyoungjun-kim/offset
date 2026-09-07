@@ -24,3 +24,14 @@
 - Linux 검사 환경의 업로드 조기 응답 문제를 요청 본문 처리 순서로 해결했다.
 - Google OAuth 자격 정보와 관리자 이메일 설정은 아직 필요하다.
 - 이 배포 기록만 추가한 후속 커밋은 실행 코드 변경이 없어 재배포하지 않는다.
+
+## 상세 원문 및 Pretendard 반영
+
+- 2026-09-07 14:31 KST, Sites v149 배포 성공.
+- 실행 소스: 83d1a9e96aa450e4489222b8633250d2ac7f8a98.
+- 원티드 wd/331333 배치, Pretendard 로컬 폰트, 워크숍 원문 7개 섹션과 FAQ 9개 반영.
+- /workshop과 /programs/portfolio-workshop은 동일 상세 구현.
+- 본문 전체 텍스트 보존 및 관리자 변경 반영 포함 16개 검사 통과.
+- GitHub 검사: https://github.com/jayyoungjun-kim/offset/actions/runs/34087101845.
+- QA HTTP 응답에서 원문 섹션과 FAQ, 실제 WOFF2 폰트 제공 확인.
+- 기존 운영 offset.quest 배포는 수행하지 않음.

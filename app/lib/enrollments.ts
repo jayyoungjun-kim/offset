@@ -23,8 +23,8 @@ export async function listEnrollments(r: Request) {
 }
 export async function submitEnrollment(r: Request) {
   try {
-    sameOrigin(r);
     const b = await bodyJson(r);
+    sameOrigin(r);
     const u = await requireUser(r);
     if (
       typeof b.programId !== "string" ||

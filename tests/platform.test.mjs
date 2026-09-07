@@ -47,6 +47,8 @@ async function request(
     method,
     redirect: "manual",
     headers: {
+      // Isolate requests: early auth rejection can close an unread upload in Miniflare.
+      connection: "close",
       ...(token ? { cookie: `offset_session=${token}` } : {}),
       ...(method !== "GET"
         ? {

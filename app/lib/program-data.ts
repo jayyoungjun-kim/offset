@@ -63,7 +63,7 @@ export const seedPrograms: Program[] = [
     mentor: "OFFSET 멘토",
     mentorBio:
       "현 심플 컴플렉스 디자인 디렉터. 전 29CM 프로덕트 디자인 리드. 현업과 채용의 관점에서 포트폴리오를 함께 살펴봅니다.",
-    image: "/workshop-icon-07.png",
+    image: "",
     order: 0,
     updatedAt: "2026-09-07T00:00:00.000Z",
   },

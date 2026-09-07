@@ -7,6 +7,7 @@ import {
   ApiError,
 } from "../../../lib/auth";
 import { listPrograms, saveProgram, database } from "../../../lib/store";
+import { mediaBucket } from "../../../lib/media";
 import { validateProgram } from "../../../lib/validation";
 export async function GET(r: Request) {
   try {
@@ -21,6 +22,8 @@ export async function POST(r: Request) {
     sameOrigin(r);
     const user = await requireUser(r, true);
     const p = validateProgram(await bodyJson(r, 256000));
+    if (p.image && !await mediaBucket().head(`thumbnails/${p.image.slice(7)}`))
+      throw new ApiError(400, "이미지를 찾을 수 없습니다. 다시 업로드하거나 선택해 주세요.");
     const conflict = await database()
       .prepare("SELECT id FROM programs WHERE slug=? AND id!=?")
       .bind(p.slug, p.id)

@@ -34,12 +34,9 @@ export function validateProgram(v: Record<string, unknown>): Program {
     order > 10000
   )
     throw new ApiError(400, "가격과 순서를 확인해 주세요.");
-  const image = text(v.image, 500);
-  if (!/^\/(?!\/)[a-zA-Z0-9/_ .-]+\.(png|jpg|jpeg|webp|svg)$/.test(image))
-    throw new ApiError(
-      400,
-      "이미지는 public 폴더의 이미지 경로를 입력해 주세요.",
-    );
+  const image = typeof v.image === "string" ? v.image.trim() : "";
+  if (image && !/^\/media\/[a-f0-9-]{36}\.webp$/.test(image))
+    throw new ApiError(400, "이미지 관리에서 썸네일을 선택해 주세요.");
   const mentorImage = typeof v.mentorImage === "string" ? v.mentorImage.trim() : "";
   if(mentorImage){
     let valid=/^\/(?!\/)[a-zA-Z0-9_./-]+$/.test(mentorImage);

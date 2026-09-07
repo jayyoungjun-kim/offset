@@ -1,5 +1,7 @@
 "use client";
 import {demoApplications,readDemoApplications,saveDemoStatus} from "../lib/demo-applications";
+import ImageLibrary from "./image-library";
+import type { MediaImage } from "../lib/media-types";
 import SectionEditor from "./section-editor";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -25,6 +27,7 @@ const sections = [
   ["programs", "프로그램"],
   ["applications", "신청 관리"],
   ["content", "콘텐츠"],
+  ["images", "이미지 관리"],
   ["settings", "운영 설정"],
 ] as const;
 type Section = (typeof sections)[number][0];
@@ -56,6 +59,8 @@ export default function AdminConsole({
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
     [filter, setFilter] = useState("all");
+  const [images,setImages]=useState<MediaImage[]>([]);
+  const [imageBusy,setImageBusy]=useState(false);
   async function reload() {
     setError("");
     try {
@@ -221,7 +226,7 @@ export default function AdminConsole({
               className={section === id ? "active" : ""}
               onClick={() => changeSection(id)}
             >
-              <span>{["▦", "≡", "□", "⚙"][i]}</span>
+              <span>{["▦", "≡", "□", "▧", "⚙"][i]}</span>
               {label}
             </button>
           ))}
@@ -453,12 +458,20 @@ export default function AdminConsole({
                           "closed",
                         ])}
                         {field("order", "리스트 표시 순서")}
-                        {field("image", "이미지 경로 (/파일명.png)")}
+
                       </div>
                       <p className="of-muted">
                         초안은 공개 리스트와 상세에서 숨겨집니다. 모집 중으로
                         저장하면 로그인한 회원이 신청할 수 있습니다.
                       </p>
+                    </section>
+                    <section>
+                      <h2>썸네일 이미지</h2>
+                      <div className="of-thumbnail-preview">{editing.image&&<img src={editing.image} alt="선택한 썸네일"/>}</div>
+                      <p className="of-muted">리스트와 상세페이지에 동일하게 표시됩니다. 선택하지 않으면 공란으로 표시됩니다.</p>
+                      {editing.image&&<button type="button" className="of-button secondary" disabled={imageBusy} onClick={()=>setEditing({...editing,image:""})}>썸네일 제거</button>}
+                      <ImageLibrary key={editing.id} preview={preview} images={images} onImages={setImages} selected={editing.image} onSelect={image=>setEditing(old=>old?{...old,image}:old)} onBusy={setImageBusy}/>
+                      <p className="of-muted">업로드한 이미지는 보관함에 저장됩니다. 썸네일 선택·제거는 아래 변경 사항 저장을 누르면 반영됩니다.</p>
                     </section>
                     <section>
                       <h2>참여 안내</h2>
@@ -504,7 +517,7 @@ export default function AdminConsole({
                       >
                         취소
                       </button>
-                      <button className="of-button" disabled={preview || busy}>
+                      <button className="of-button" disabled={preview || busy || imageBusy}>
                         {preview
                           ? "미리보기에서는 저장할 수 없어요"
                           : busy
@@ -515,6 +528,7 @@ export default function AdminConsole({
                   </form>
                 </>
               )}
+              {section === "images" && <><div className="of-admin-title"><div><h1>이미지 관리</h1><p>썸네일을 업로드하고 프로그램에서 사용할 이미지를 관리합니다.</p></div></div><ImageLibrary preview={preview} images={images} onImages={setImages}/></>}
               {section === "applications" && (
                 <>
                   <div className="of-admin-title">

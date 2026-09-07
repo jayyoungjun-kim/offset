@@ -8,6 +8,8 @@ export function database() {
 // only when absent; an admin save persists the sections with the program.
 function readProgram(data: string): Program {
   const p: Program = JSON.parse(data);
+  // Retire the old decorative artwork; uploads use managed media URLs.
+  if (!p.image?.startsWith("/media/")) p.image = "";
   if (p.id === "portfolio-01" && p.detailSections === undefined) {
     p.detailSections = seedPrograms[0].detailSections;
   }

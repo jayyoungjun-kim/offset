@@ -80,6 +80,7 @@ before(
           GOOGLE_CLIENT_SECRET: "",
           AUTH_ORIGIN: origin,
         },
+        r2_buckets: [{binding:"MEDIA",bucket_name:"offset-test-media"}],
         d1_databases: [
           {
             binding: "DB",
@@ -436,6 +437,31 @@ test("admin mentor card changes persist and unsafe image URLs are rejected", asy
  const stored=await (await request("/api/admin/programs",{token:adminToken})).json();assert.equal(stored.programs.find(x=>x.id===p.id).mentorImage,body.mentorImage);
  const html=await (await request("/programs/test-program")).text();assert.match(html,/두 번째 소개 문장도 표시됩니다/);assert.match(html,/https:\/\/example.com\/mentor.png/);assert.doesNotMatch(html,/href="#mentor"/);
  const bad=await request("/api/admin/programs",{method:"POST",token:adminToken,body:{...body,mentorImage:"javascript:alert(1)"}});assert.equal(bad.status,400);
+});
+
+
+test("managed images enforce admin access, persist, attach, clear and delete", async () => {
+  const upload = (token, body, external=false, type="image/webp") => fetch(origin+"/api/admin/media?name=thumbnail.webp",{method:"POST",headers:{connection:"close",cookie:`offset_session=${token||""}`,origin:external?"https://evil.example":origin,"content-type":type},body});
+  for(const token of [undefined,otherToken]) {
+    const r=await request("/api/admin/media",{token});assert.equal(r.status,token?403:401);
+  }
+  const bytes=readFileSync("tests/fixtures/thumbnail.webp");
+  const forbidden=await upload(otherToken,bytes);assert.equal(forbidden.status,403);await forbidden.text();
+  const saved=await upload(adminToken,bytes);assert.equal(saved.status,201);const {image}=await saved.json();
+  assert.equal(image.width,8);assert.equal(image.height,6);assert.equal(image.size,bytes.length);
+  const file=await request(image.url);assert.equal(file.status,200);assert.equal(file.headers.get("content-type"),"image/webp");assert.deepEqual(Buffer.from(await file.arrayBuffer()),bytes);
+  const p={...seedPrograms[0],image:image.url};
+  assert.equal((await request("/api/admin/programs",{method:"POST",token:adminToken,body:p})).status,200);
+  const listed=await (await request("/api/admin/media",{token:adminToken})).json();assert.ok(listed.images.find(x=>x.id===image.id).usedBy.length);
+  const html=await (await request("/programs/portfolio-workshop")).text();assert.ok(html.includes(image.url));assert.ok(!html.includes('class="of-artwork-top"'));
+  assert.equal((await request(`/api/admin/media?id=${image.id}`,{method:"DELETE",token:adminToken})).status,409);
+  assert.equal((await request("/api/admin/programs",{method:"POST",token:adminToken,body:{...p,image:""}})).status,200);
+  assert.equal((await request(`/api/admin/media?id=${image.id}`,{method:"DELETE",token:adminToken})).status,200);
+  assert.equal((await request(image.url)).status,404);
+  assert.equal((await request("/api/admin/programs",{method:"POST",token:adminToken,body:p})).status,400);
+  const bad=await upload(adminToken,new Uint8Array(30));assert.equal(bad.status,400);await bad.text();
+  const oversized=await upload(adminToken,new Uint8Array(500*1024+1));assert.equal(oversized.status,413);await oversized.text();
+  const csrf=await upload(adminToken,bytes,true);assert.equal(csrf.status,403);await csrf.text();
 });
 
 test("admin HTML round trip renders formatting and removes executable content", async () => {

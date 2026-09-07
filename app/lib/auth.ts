@@ -123,7 +123,7 @@ export function fail(error: unknown) {
   // Workers can load the same server module through different bundled entries.
   // Match the explicit error identity instead of a bundle-local constructor.
   if (error instanceof Error && error.name === "OffsetApiError" && "status" in error
-      && typeof error.status === "number" && [400,401,403,404,409,413].includes(error.status))
+      && typeof error.status === "number" && [400,401,403,404,409,413,415,503].includes(error.status))
     return json({ error: error.message }, error.status);
   console.error("OFFSET API failure", error);
   return json(

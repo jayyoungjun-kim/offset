@@ -44,3 +44,11 @@
 - Primary #000000, Pretendard 및 원문 7개 섹션 유지.
 - CI 16개 검사 통과: https://github.com/jayyoungjun-kim/offset/actions/runs/34087896204
 - QA 실제 응답에서 새 구조 및 원문 섹션 확인. 운영 도메인 배포는 수행하지 않음.
+
+## 2열 카드 목록 및 상세 완성도 개선
+
+- 2026-09-07, Sites v151, 소스 12cbf9910761050d65d8fa788b7884573f11c4b7.
+- 사용자 첨부 원티드 이벤트 카드 배치, 데스크탑 2열/모바일 1열. 상단 소개·필터·하단 장식 문구 제거.
+- 실제 최신순·모집 중 우선·낮은 가격순 정렬, 공통 썸네일, 상세 정보 위계와 테두리 정리.
+- 기존 원문/권한 검사 16개 및 GitHub CI 통과: https://github.com/jayyoungjun-kim/offset/actions/runs/34096577463
+- QA HTTP 응답에서 신규 카드와 기존 소개 제거 확인. 운영 배포 없음.

@@ -120,3 +120,13 @@
 - 배포 후1920/1440/1024px에서 본문·패널·대표이미지 x/y/width 모두 원티드 원문 렌더와 일치. 390px 대표이미지 x19.5/y76/width351 일치.
 - 참고 자동 브라우저403은 정상 HTTP 원문 HTML/CSS 렌더로 비교. 브라우저 캡처와 좌표 확인.
 - 18개 기능 검사 및 CI 통과: https://github.com/jayyoungjun-kim/offset/actions/runs/34104846609
+
+## 신청 샘플·마이페이지·4열 목록
+
+- 2026-09-07, Sites v161 배포 성공, 소스 8b211a0a86eb27dba432bdcd5a324c143edc6b4a.
+- /admin/preview 가상 신청자5명, 샘플 상태 변경과 해당 /account/preview 회원 화면 연결. 샘플만 브라우저 저장소 사용, 실제 신청/DB/알림 변경 없음.
+- 실제 /account는 기존 로그인 및 본인 전용 API를 통해 신청 요약·상태 필터·제출 신청서·회원 정보·문의·로그아웃 제공.
+- 데스크탑4열/태블릿2열/작은 모바일1열 목록. 원티드형 정렬 메뉴, 체크표시, Escape/외부 클릭 닫기.
+- 배포된 QA에서 샘플 어드민→회원 상태 반영, 신청서 열기, 프로필, 모바일 가로 넘침, 4/2/1열, 정렬 변경 브라우저 검사 통과.
+- 기존18개 권한/저장 검사 및 CI 통과: https://github.com/jayyoungjun-kim/offset/actions/runs/34128880813
+- Google OAuth와 관리자 이메일 설정은 별도로 필요. 상세 설계: member-experience.md.

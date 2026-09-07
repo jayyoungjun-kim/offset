@@ -52,3 +52,13 @@
 - 실제 최신순·모집 중 우선·낮은 가격순 정렬, 공통 썸네일, 상세 정보 위계와 테두리 정리.
 - 기존 원문/권한 검사 16개 및 GitHub CI 통과: https://github.com/jayyoungjun-kim/offset/actions/runs/34096577463
 - QA HTTP 응답에서 신규 카드와 기존 소개 제거 확인. 운영 배포 없음.
+
+## 상세 콘텐츠 HTML 에디터
+
+- 2026-09-07, Sites v152 배포 성공, 소스 c4c1f38befc67b8acfbaeddd0431bbb9fdf102d2.
+- 관리자 프로그램 편집에 섹션별 HTML 코드, 나란히 보기, 샌드박스 미리보기와 서식 삽입 도구 추가.
+- 서버 저장 및 상세 렌더링 시 HTML 정제. 기존 원문 형식도 유지하며 HTML로 전환 가능.
+- 저장·재조회·상세 반영·실행 코드 제거·권한 검사를 포함한 17개 검사 통과.
+- GitHub CI: https://github.com/jayyoungjun-kim/offset/actions/runs/34100369199
+- QA 관리자 미리보기 HTTP 200 확인. 실제 저장에는 Google OAuth 및 관리자 이메일 설정이 필요함.
+- 실행 코드가 없는 이 배포 기록 커밋은 별도 재배포하지 않음.

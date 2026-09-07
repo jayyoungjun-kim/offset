@@ -1,48 +1,19 @@
-name: Deploy Production
+name: Production release (manual)
 
+# QA changes must never automatically replace the live site.
+# The renewed platform requires Workers; Pages cannot host its APIs.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: production
-  cancel-in-progress: true
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  release-readiness:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run build
-      - name: Generate static site
+      - name: Require completed QA and explicit production release
         run: |
-          npm run start &
-          server_pid=$!
-          trap 'kill $server_pid' EXIT
-          for attempt in {1..30}; do
-            if curl --fail --silent http://127.0.0.1:3000/ > /dev/null; then
-              break
-            fi
-            sleep 1
-          done
-          node scripts/build-github-pages.mjs http://127.0.0.1:3000
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          echo 'Production remains unchanged. Complete QA and use the approved Worker release procedure in DEPLOYMENT.md.'
+          exit 1

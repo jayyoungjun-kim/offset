@@ -4,11 +4,12 @@ import SiteHeader from "../site-header";
 import SiteFooter from "../site-footer";
 
 const title = "프로덕트 디자이너 포트폴리오 완성반";
-const description = "디자이너의 실무와 성장을 위한 OFFSET의 다양한 디자인 워크숍을 만나보세요.";
+const description = "현업 채용 담당자의 관점으로 포트폴리오를 진단하고, 4주 동안 리뷰와 수정을 반복하는 주니어 프로덕트 디자이너 오프라인 워크숍입니다.";
 
 export const metadata: Metadata = {
   title,
   description,
+  alternates: { canonical: "/workshop" },
   openGraph: {
     title,
     description,
@@ -31,6 +32,21 @@ export const metadata: Metadata = {
     description,
     images: ["/og-image.png"],
   },
+};
+
+const courseJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "@id": "https://offset.quest/workshop#course",
+  name: title,
+  description: "현업 프로덕트 디자인 리드이자 채용 담당자의 관점으로 포트폴리오를 진단하고, 4주 동안 리뷰와 수정을 반복하는 소규모 오프라인 워크숍입니다.",
+  url: "https://offset.quest/workshop",
+  inLanguage: "ko-KR",
+  provider: { "@type": "Organization", "@id": "https://offset.quest/#organization", name: "OFFSET", url: "https://offset.quest" },
+  educationalLevel: "주니어 프로덕트 디자이너",
+  timeRequired: "P4W",
+  courseMode: "onsite",
+  offers: { "@type": "Offer", price: "320000", priceCurrency: "KRW", availability: "https://schema.org/InStock", url: "https://offset.quest/apply" },
 };
 
 const workshopInfo = [
@@ -106,6 +122,7 @@ function Section({title, children}:{title:string; children:React.ReactNode}) {
 
 export default function Home() {
   return <main className="workshop-page">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(courseJsonLd)}} />
     <SiteHeader />
     <div className="page-body">
       <article className="container main-content">

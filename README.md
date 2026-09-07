@@ -1,3 +1,21 @@
+# OFFSET 플랫폼 리뉴얼 · v0.1
+
+리스트·상세·회원 신청·Google OAuth·운영 콘솔의 서버 기반 구현입니다. 시작점은 `/programs`, 운영 화면은 `/admin`, 읽기 전용 운영 미리보기는 `/admin/preview`입니다.
+
+- [서비스 설계](documentation/service-strategy.md), [디자인 기준](design.md)
+- [실행·구글 연결·운영 가이드](documentation/operations.md), [검증 기록](documentation/verification.md)
+- [서비스 분석 PDF](output/pdf/offset-service-blueprint.pdf)
+
+```sh
+pnpm install --frozen-lockfile
+pnpm db:local
+pnpm dev
+```
+
+실제 Google 연결에는 `.env.example`의 OAuth 설정과 운영자 이메일이 필요합니다. 이번 플랫폼은 Workers와 D1을 사용하므로 기존 GitHub Pages 정적 내보내기로 배포할 수 없습니다.
+
+---
+
 # vinext-starter
 
 ## Deployment

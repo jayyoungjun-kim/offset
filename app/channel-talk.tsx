@@ -5,7 +5,7 @@ import { trackEvent } from "./analytics";
 
 const CHANNEL_SCRIPT_ID = "channel-talk-widget";
 const CHANNEL_SCRIPT_URL = "https://cdn.channel.io/plugin/ch-plugin-web.js";
-const RAISED_LAUNCHER_PATH = /^\/(workshop|apply)(?:\/|$)/;
+const RAISED_LAUNCHER_PATH = /^\/(workshop|apply|programs)(?:\/|$)/;
 const CHANNEL_PLUGIN_KEY =
   process.env.NEXT_PUBLIC_CHANNEL_PLUGIN_KEY ||
   "a55a2e4a-90f1-463f-b9ca-317c14fe1f8e";
@@ -21,6 +21,7 @@ type ChannelWindow = Window & {
 
 export default function ChannelTalk() {
   useEffect(() => {
+    if (/^\/(admin|login|account)(?:\/|$)/.test(window.location.pathname)) return;
     const channelWindow = window as ChannelWindow;
     const shouldRaiseLauncher =
       RAISED_LAUNCHER_PATH.test(window.location.pathname) &&
@@ -29,7 +30,7 @@ export default function ChannelTalk() {
     if (!channelWindow.ChannelIO) {
       const channel = function (...args: unknown[]) {
         channel.c?.(args);
-      } as ChannelWindow["ChannelIO"];
+      } as NonNullable<ChannelWindow["ChannelIO"]>;
       channel.q = [];
       channel.c = (args) => channel.q?.push(args);
       channelWindow.ChannelIO = channel;

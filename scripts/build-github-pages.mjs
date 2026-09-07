@@ -3,6 +3,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const hosting = JSON.parse(await readFile(path.join(projectRoot, ".openai/hosting.json"), "utf8"));
+if (hosting.d1) throw new Error("OFFSET 플랫폼은 로그인과 D1 API가 필요합니다. GitHub Pages 정적 배포 대신 Worker 서버 배포를 사용하세요. documentation/operations.md 참고.");
 const outputDir = path.join(projectRoot, "docs");
 const clientDir = path.join(projectRoot, "dist", "client");
 const siteOrigin = process.argv[2] || "http://127.0.0.1:3000";

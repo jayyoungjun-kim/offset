@@ -1,5 +1,20 @@
 {
   "version": "7",
   "dialect": "sqlite",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1788754381554,
+      "tag": "0000_nice_darwin",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1788754470739,
+      "tag": "0001_initial_program",
+      "breakpoints": true
+    }
+  ]
 }

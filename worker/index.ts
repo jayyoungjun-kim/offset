@@ -5,6 +5,7 @@ import handler from "vinext/server/app-router-entry";
 interface Env {
   ASSETS: Fetcher;
   DB: D1Database;
+  SITE_ENV?: string;
   IMAGES: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
@@ -29,6 +30,9 @@ const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
+    if (env.SITE_ENV === 'qa' && url.pathname === '/robots.txt') {
+      return new Response('User-agent: *\nDisallow: /\n', {headers:{'content-type':'text/plain','x-robots-tag':'noindex'}});
+    }
     if (url.pathname === "/_vinext/image") {
       const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
       return handleImageOptimization(request, {
@@ -40,7 +44,11 @@ const worker = {
       }, allowedWidths);
     }
 
-    return handler.fetch(request, env, ctx);
+    const response = await handler.fetch(request, env, ctx);
+    if (env.SITE_ENV !== 'qa') return response;
+    const protectedResponse = new Response(response.body, response);
+    protectedResponse.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+    return protectedResponse;
   },
 };
 

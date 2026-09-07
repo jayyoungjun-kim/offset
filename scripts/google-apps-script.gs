@@ -7,7 +7,7 @@ const DRIVE_FOLDER_ID = SCRIPT_PROPERTIES.getProperty("DRIVE_FOLDER_ID");
 const FORM_SUBMIT_SECRET = SCRIPT_PROPERTIES.getProperty("FORM_SUBMIT_SECRET");
 const NOTIFICATION_EMAIL = SCRIPT_PROPERTIES.getProperty("NOTIFICATION_EMAIL");
 const MAX_FILE_SIZE = 20 * 1024 * 1024;
-const HEADERS = ["제출 ID","제출 시각","이름","연락처","이메일","경력","포트폴리오 링크","첨부 파일명","Drive 파일 링크","현재 고민","수정 시간 확보","참여 조건","가능 시간대"];
+const HEADERS = ["제출 ID","제출 시각","이름","연락처","이메일","포트폴리오 링크","첨부 파일명","파일 링크","현재 고민","수정 시간 확보","참여 조건","가능 시간대","경력","레벨","레벨 매칭 1차","가능 시간대 매칭","레벨 매칭 2차","메일 발송","문자 발송","입금 완료","입금 완료 문자"];
 
 function jsonResponse(data) {
   return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
@@ -76,7 +76,28 @@ function recordApplication(payload) {
     const duplicate = sheet.createTextFinder(payload.submissionId).matchEntireCell(true).findNext();
     if (duplicate) return { ok: true, duplicate: true };
     const file = payload.file || {};
-    sheet.appendRow([payload.submissionId,new Date(payload.submittedAt || Date.now()),payload.name,payload.phone,payload.email,payload.career,payload.portfolioLink || "",file.name || "",file.url || "",payload.concern,payload.commitment,(payload.conditions || []).join(" / "),(payload.availability || []).join(" / ")]);
+    const valuesByHeader = {
+      "제출 ID": payload.submissionId,
+      "제출 시각": new Date(payload.submittedAt || Date.now()),
+      "이름": payload.name,
+      "연락처": payload.phone,
+      "이메일": payload.email,
+      "포트폴리오 링크": payload.portfolioLink || "",
+      "파일 링크": file.url || "",
+      "Drive 파일 링크": file.url || "",
+      "첨부 파일명": file.name || "",
+      "현재 고민": payload.concern,
+      "수정 시간 확보": payload.commitment,
+      "참여 조건": (payload.conditions || []).join(" / "),
+      "가능 시간대": (payload.availability || []).join(" / "),
+      "경력": payload.career,
+    };
+    const lastColumn = sheet.getLastColumn();
+    const headers = sheet.getRange(1, 1, 1, lastColumn).getDisplayValues()[0];
+    const row = headers.map(function(header) {
+      return Object.prototype.hasOwnProperty.call(valuesByHeader, header) ? valuesByHeader[header] : "";
+    });
+    sheet.appendRow(row);
     recorded = true;
   } finally {
     lock.releaseLock();

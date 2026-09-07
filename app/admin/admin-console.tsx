@@ -484,9 +484,17 @@ export default function AdminConsole({
                       {multiline("outcomes", "학습 결과 (한 줄에 한 항목)")}
                       {multiline("audience", "참여 대상 (한 줄에 한 항목)")}
                       {multiline("curriculum", "진행 과정 (한 줄에 한 단계)")}
-                      {field("mentor", "멘토 이름")}
-                      {multiline("mentorBio", "멘토 소개")}
                       </>}
+                    </section>
+                    <section className="of-mentor-admin">
+                      <h2>오른쪽 패널 · 멘토 소개</h2>
+                      <p className="of-muted">상세페이지 오른쪽 멘토 카드에 표시됩니다. 본문의 멘토 섹션은 상세 콘텐츠에서 별도로 편집합니다.</p>
+                      <div className="of-form">
+                        {field("mentor", "멘토 이름")}
+                        {multiline("mentorBio", "소속·직함·소개")}
+                        <label>멘토 사진 주소 (선택)<input value={editing.mentorImage??""} maxLength={2000} placeholder="https://… 또는 /이미지.png" onChange={e=>setEditing({...editing,mentorImage:e.target.value})}/></label>
+                        <p className="of-muted">비워두면 기본 아바타를 사용합니다. 변경 사항 저장 후 상세페이지에 반영됩니다.</p>
+                      </div>
                     </section>
                     <div className="of-editor-actions">
                       <button

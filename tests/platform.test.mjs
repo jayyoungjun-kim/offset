@@ -430,6 +430,14 @@ test("detail sections can be added, reordered, deleted and cleared without resto
  }
 });
 
+test("admin mentor card changes persist and unsafe image URLs are rejected", async()=>{
+ const body={...p,status:"open",mentor:"샘플 멘토",mentorBio:"첫 번째 소개 문장. 두 번째 소개 문장도 표시됩니다.",mentorImage:"https://example.com/mentor.png",detailSections:[{id:"overview",title:"소개",body:"프로그램 소개"}]};
+ const response=await request("/api/admin/programs",{method:"POST",token:adminToken,body});assert.equal(response.status,200);
+ const stored=await (await request("/api/admin/programs",{token:adminToken})).json();assert.equal(stored.programs.find(x=>x.id===p.id).mentorImage,body.mentorImage);
+ const html=await (await request("/programs/test-program")).text();assert.match(html,/두 번째 소개 문장도 표시됩니다/);assert.match(html,/https:\/\/example.com\/mentor.png/);assert.doesNotMatch(html,/href="#mentor"/);
+ const bad=await request("/api/admin/programs",{method:"POST",token:adminToken,body:{...body,mentorImage:"javascript:alert(1)"}});assert.equal(bad.status,400);
+});
+
 test("admin HTML round trip renders formatting and removes executable content", async () => {
  const raw='<h3>HTML 편집 제목</h3><p style="text-align: center">보존할 <strong>본문</strong></p><script>alert(1)</script><img src="https://example.test/image.png" onerror="alert(1)"><a href="javascript:alert(1)">링크</a><iframe src="https://example.test"></iframe><table><tr><td>표 내용</td></tr></table>';
  const saved=await request("/api/admin/programs",{method:"POST",token:adminToken,body:{...p,status:"open",detailSections:[{id:"overview",title:"상세 HTML",body:"기존 원문",html:raw}]}});

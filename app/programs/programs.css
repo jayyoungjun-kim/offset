@@ -1270,3 +1270,19 @@
 .of-sort-menu{position:relative;z-index:2;flex-shrink:0}.of-sort-menu summary{display:flex;align-items:center;gap:8px;list-style:none;padding:10px 14px;border:1px solid #70737c29;border-radius:12px;background:#fff;font-size:14px;line-height:20px;font-weight:600;cursor:pointer}.of-sort-menu summary::-webkit-details-marker{display:none}.of-sort-menu>div{position:absolute;top:calc(100% + 8px);right:0;width:180px;padding:6px;background:#fff;border:1px solid #70737c29;border-radius:12px;box-shadow:0 4px 20px #0000000d}.of-sort-menu button{width:100%;display:flex;justify-content:space-between;gap:12px;border:0;background:none;padding:12px;border-radius:8px;font-size:14px;text-align:left}.of-sort-menu button:hover{background:#f7f7f8}.of-sort-menu button[aria-pressed=true]{font-weight:600}
 @media(max-width:991px){.of-catalog-site .of-event-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 20px}}
 @media(max-width:479px){.of-catalog-site .of-event-grid{grid-template-columns:1fr;gap:32px}.of-catalog-site .of-program-artwork{padding:26px}.of-catalog-site .of-program-artwork>p{font-size:26px}}
+
+/* Content-aligned footer, consistent thumbnails and editable mentor card. */
+.of-site .site-footer .footer-inner{width:calc(100% - 120px);max-width:1080px;margin:0 auto}
+.of-site .of-program-artwork{aspect-ratio:4/3}
+.of-detail-site .of-event-mentor-row{display:flex;gap:12px;align-items:flex-start}
+.of-detail-site .of-event-mentor-profile>strong,.of-detail-site .of-event-mentor-profile>p{white-space:pre-wrap;text-overflow:clip;overflow-wrap:anywhere;word-break:keep-all}
+.of-detail-site .of-event-mentor-profile>p{margin-top:4px}
+.of-detail-site .of-event-avatar img{width:40px;height:40px;object-fit:cover;border-radius:50%}
+.of-detail-site .of-event-mentor>.of-mentor-anchor{margin:0;font-size:13px;line-height:18px}
+.of-detail-site .of-event-registration h1{word-break:keep-all;overflow-wrap:anywhere}
+.of-detail-site .of-original-section{scroll-margin-top:84px}
+.of-site.of-member-site .site-footer .footer-inner{width:calc(100% - 80px);max-width:1080px}
+@media(min-width:1600px){.of-catalog-site .site-footer .footer-inner,.of-detail-site .site-footer .footer-inner{max-width:1400px}}
+@media(max-width:991px){.of-catalog-site .site-footer .footer-inner,.of-detail-site .site-footer .footer-inner{width:90%;max-width:none}}
+@media(max-width:767px){.of-site.of-member-site .site-footer .footer-inner{width:calc(100% - 40px)}}
+@media(max-width:375px){.of-catalog-site .site-footer .footer-inner,.of-detail-site .site-footer .footer-inner{width:calc(100% - 40px)}}

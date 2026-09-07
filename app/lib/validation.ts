@@ -40,6 +40,12 @@ export function validateProgram(v: Record<string, unknown>): Program {
       400,
       "이미지는 public 폴더의 이미지 경로를 입력해 주세요.",
     );
+  const mentorImage = typeof v.mentorImage === "string" ? v.mentorImage.trim() : "";
+  if(mentorImage){
+    let valid=/^\/(?!\/)[a-zA-Z0-9_./-]+$/.test(mentorImage);
+    try{const url=new URL(mentorImage);valid=url.protocol==="https:"&&!url.username&&!url.password;}catch{}
+    if(!valid||mentorImage.length>2000)throw new ApiError(400,"멘토 사진은 /로 시작하는 이미지 경로나 HTTPS 주소를 입력해 주세요.");
+  }
   let detailSections: Program["detailSections"];
   if (v.detailSections !== undefined) {
     if (!Array.isArray(v.detailSections) || v.detailSections.length > 20)
@@ -76,6 +82,7 @@ export function validateProgram(v: Record<string, unknown>): Program {
     curriculum: lines(v.curriculum),
     mentor: text(v.mentor, 100),
     mentorBio: text(v.mentorBio, 2000),
+    ...(mentorImage?{mentorImage}:{}),
     image,
     order,
     updatedAt: new Date().toISOString(),

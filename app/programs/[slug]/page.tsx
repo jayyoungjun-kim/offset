@@ -90,7 +90,8 @@ export default async function Detail({
             <div className="of-event-support">
               <div className="of-event-mentor">
                 <h2>멘토 소개</h2>
-                <a className="of-event-mentor-row" href="#mentor" aria-label="멘토 소개 자세히 보기"><span className="of-event-avatar of-event-person" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg></span><div className="of-event-mentor-profile"><strong>{p.mentor}</strong><p>{p.mentorBio.split(".")[0]}</p></div></a>
+                <div className="of-event-mentor-row"><span className="of-event-avatar of-event-person" aria-hidden="true">{p.mentorImage?<img src={p.mentorImage} alt="" width="40" height="40"/>:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg>}</span><div className="of-event-mentor-profile"><strong>{p.mentor}</strong><p>{p.mentorBio}</p></div></div>
+                {(p.detailSections===undefined||p.detailSections.some(s=>s.id==="mentor"))&&<a className="of-mentor-anchor" href="#mentor">멘토 소개 자세히 보기 ↗</a>}
                 <div className="of-event-tags"><span>{p.category}</span><span>{p.format}</span><span>{p.cohort}</span></div>
               </div>
             </div>

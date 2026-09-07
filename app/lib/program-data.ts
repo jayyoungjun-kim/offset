@@ -21,6 +21,7 @@ export type Program = {
   curriculum: string[];
   mentor: string;
   mentorBio: string;
+  mentorImage?: string;
   image: string;
   order: number;
   updatedAt: string;

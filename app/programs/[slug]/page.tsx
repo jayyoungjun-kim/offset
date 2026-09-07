@@ -77,9 +77,9 @@ export default async function Detail({
               <div className="of-event-badges"><span>{p.category}</span><span>{p.price ? "유료" : "무료"}</span></div>
               <h1>{p.title.replace("\n", " ")}</h1>
               <dl className="of-event-schedule">
-                <div><dt>진행기간</dt><dd>{p.duration}</dd></div>
-                <div><dt>진행시간</dt><dd>{p.schedule}</dd></div>
-                <div><dt>진행 장소</dt><dd>{p.location}</dd></div>
+                <div><dt><span className="of-panel-sr">진행기간</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 2v6m8-6v6M3 11h18"/></svg></dt><dd>{p.duration}</dd></div>
+                <div><dt><span className="of-panel-sr">진행시간</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg></dt><dd>{p.schedule}</dd></div>
+                <div><dt><span className="of-panel-sr">진행 장소</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8m-4-4v4"/></svg></dt><dd>{p.location}</dd></div>
               </dl>
               <div className="of-event-enrollment">
                 <p>{p.cohort} {statusLabel[p.status]}</p>
@@ -90,11 +90,12 @@ export default async function Detail({
             <div className="of-event-support">
               <div className="of-event-organizer">
                 <Link className="of-event-organizer-heading" href="/about"><span className="of-event-avatar"><img src="/offset-logo.svg" width="32" height="16" alt="" /></span><strong>OFFSET</strong></Link>
+                <p className="of-event-organizer-description">배우고, 다듬고, 함께 나아갑니다.</p>
                 <a className="of-event-contact" href="mailto:offset.learn@gmail.com">문의하기 ↗</a>
               </div>
               <div className="of-event-mentor">
                 <h2>멘토 소개</h2>
-                <div className="of-event-mentor-profile"><strong>{p.mentor}</strong><p>{p.mentorBio}</p></div>
+                <div className="of-event-mentor-row"><span className="of-event-avatar of-event-person" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg></span><div className="of-event-mentor-profile"><strong>{p.mentor}</strong><p title={p.mentorBio}>{p.mentorBio}</p></div></div>
                 <a href="#mentor">자세히 보기 ↓</a>
                 <div className="of-event-tags"><span>{p.category}</span><span>{p.format}</span><span>{p.cohort}</span></div>
               </div>

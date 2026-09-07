@@ -1167,3 +1167,20 @@
  .of-event-organizer-heading strong{font-weight:500}
  .of-event-enrollment .of-mobile-apply{position:fixed;bottom:0;left:0;right:0;padding:12px 20px calc(12px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #70737c14;z-index:30}
 }
+
+/* recruitingGB_2_1: direct registration, icon metadata, compact profiles. */
+.of-panel-sr{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.of-event-schedule>div{grid-template-columns:20px minmax(0,1fr);gap:8px}
+.of-event-schedule dt svg{display:block;width:20px;height:20px;position:relative;top:2px;color:#37383c9c}
+.of-event-enrollment{border-top:0;margin-top:52px;padding-top:16px}
+.of-event-enrollment dl{box-shadow:none;padding:0;border-radius:0;margin-bottom:20px}
+.of-event-enrollment .of-mobile-apply{display:flex;gap:8px;align-items:stretch}
+.of-event-enrollment .of-mobile-apply>.of-button{flex:1;min-width:0;width:auto}
+.of-event-share{display:inline-flex;align-items:center;justify-content:center;flex:0 0 48px;width:48px;height:48px;padding:10px;border:0;border-radius:10px;background:#17171914;color:#171719;cursor:pointer}
+.of-event-share svg{width:20px;height:20px}.of-event-share:hover{background:#17171921}.of-event-share:focus-visible{outline:2px solid #000;outline-offset:3px}
+.of-share-note{font-size:13px;line-height:18px;color:#37383c9c;margin:8px 0 0}
+.of-event-organizer-description{display:block;font-size:14px;line-height:20px;letter-spacing:.0145em;font-weight:400;color:#37383c9c;margin:12px 0 0;word-break:break-all}
+.of-event-mentor-row{display:flex;gap:12px;align-items:center}.of-event-person{background:#70737c29;color:#fff}.of-event-person svg{width:26px;height:26px}
+.of-event-mentor-profile{min-width:0;overflow:hidden}.of-event-mentor-profile>strong,.of-event-mentor-profile>p{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.of-event-mentor-profile>p{margin:0}
+@media(min-width:1600px){.of-event-layout{grid-template-columns:minmax(0,1fr) 500px}}
+@media(max-width:991px){.of-event-enrollment{margin-top:20px}.of-event-schedule>div{grid-template-columns:16px minmax(0,1fr)}.of-event-schedule dt svg{width:16px;height:16px;top:3px}.of-event-mentor-profile>p{font-size:13px;line-height:18px;letter-spacing:.0194em}}

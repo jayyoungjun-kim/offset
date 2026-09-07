@@ -11,7 +11,7 @@ export default function ApplicationAction({
   const dialog = useRef<HTMLDialogElement>(null),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
-    [name, setName] = useState("");
+    [name, setName] = useState(""), [shareNote,setShareNote]=useState("");
   useEffect(() => {
     const el = dialog.current;
     if (!el) return;
@@ -86,7 +86,9 @@ export default function ApplicationAction({
               ? "프로그램 신청하기 ↗"
               : `${p.cohort} 모집이 마감되었습니다`}
         </button>
+        <button type="button" className="of-event-share" aria-label="프로그램 링크 복사" onClick={async()=>{try{await navigator.clipboard.writeText(window.location.origin+"/programs/"+p.slug);setShareNote("링크를 복사했습니다.");}catch{setShareNote("주소창의 링크를 복사해 주세요.");}}}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M12 15V2m-4 4 4-4 4 4M7 9H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-2"/></svg></button>
       </div>
+      {shareNote&&<p className="of-share-note" role="status">{shareNote}</p>}
       {error && (
         <p role="alert" className="of-form-error">
           {error}

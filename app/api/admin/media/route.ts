@@ -1,7 +1,7 @@
 import { requireUser, sameOrigin, json, fail, ApiError } from "../../../lib/auth";
 import { listPrograms } from "../../../lib/store";
 import { mediaBucket, readImageBody } from "../../../lib/media";
-import { mediaIdPattern } from "../../../lib/media-types";
+import { MAX_IMAGE_BYTES, mediaIdPattern } from "../../../lib/media-types";
 export async function GET(r: Request) {
   try {
     await requireUser(r, true);
@@ -18,7 +18,16 @@ export async function POST(r: Request) {
     const id=crypto.randomUUID()+".webp", url=`/media/${id}`;
     await mediaBucket().put(`thumbnails/${id}`,bytes,{httpMetadata:{contentType:"image/webp"},customMetadata:{name,width:String(width),height:String(height)}});
     return json({image:{id,url,name,size:bytes.length,width,height,createdAt:new Date().toISOString(),usedBy:[]}},201);
-  } catch(e) { return fail(e); }
+  } catch(e) {
+    // Finish bounded rejected uploads so the runtime can close the request cleanly.
+    if (!r.bodyUsed && r.body) {
+      const reader = r.body.getReader(); let bytes = 0;
+      try { while (bytes <= MAX_IMAGE_BYTES) { const chunk = await reader.read(); if (chunk.done) break; bytes += chunk.value.length; } }
+      catch { /* Preserve the original validation or authorization error. */ }
+      finally { await reader.cancel().catch(()=>{}); }
+    }
+    return fail(e);
+  }
 }
 export async function DELETE(r: Request) {
   try {

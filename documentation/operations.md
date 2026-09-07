@@ -2,6 +2,8 @@
 
 2026-09-07 · v0.1
 
+현재 QA 운영 기준은 [DEPLOYMENT.md](../DEPLOYMENT.md)를 따른다. 리뉴얼은 https://qa.offset.quest 에서 검증하고 offset.quest 운영 화면은 유지한다. 아래 초기 구축 설명 중 원격 연결 전 상태는 첫 로컬 구현 당시의 기록이다.
+
 ## 현재 완료 범위
 
 - `/programs`: 검색·유형·상태 필터가 있는 반응형 리스트.
@@ -72,7 +74,7 @@ ADMIN_EMAILS=실제로 사용할 운영자 Google 이메일
 
 ## 배포
 
-현재 `.openai/hosting.json`의 기존 프로젝트 id를 유지하고 D1 논리 바인딩 `DB`를 선언했다. 원격 DB 생성·원격 비밀 변수·공개 배포는 수행하지 않았다.
+현재 `.openai/hosting.json`의 기존 프로젝트 id를 유지하고 D1 논리 바인딩 `DB`를 선언했다. 이후 사용자 요청에 따라 해당 QA 프로젝트에 D1 마이그레이션과 QA 전용 환경 설정을 적용해 배포했다. 운영 도메인의 공개 사이트는 변경하지 않았다.
 
 기존 GitHub Pages는 정적 호스팅이다. 이번 기능을 운영하려면 Workers 서버에 배포해야 한다. `dist/server/index.js`, `dist/client`, D1 스키마와 초기 데이터 마이그레이션을 포함한다. 기존 `scripts/build-github-pages.mjs`는 플랫폼 기능을 배포할 수 없으므로 D1 사용 시 실행을 차단한다.
 

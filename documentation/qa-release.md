@@ -1,0 +1,16 @@
+# QA 배포 기록
+
+2026-09-07
+
+- 환경: https://qa.offset.quest
+- 최초 플랫폼 배포: Sites v143, 소스 c9f9604b55f084824185498c9f221d486066bfec
+- D1: 초기 스키마와 모집 마감 프로그램 확인.
+- 공개 리스트/상세/어드민 미리보기: HTTP 200.
+- 미인증 어드민 API: HTTP 401.
+- 실제 서버: QA 표시, HTML noindex 메타데이터, X-Robots-Tag, GA 미로딩 확인.
+- Google 연결: configured=false. 자격 정보 설정 필요.
+- 기존 운영 신청 호환: 기존 호스트+운영 Origin의 OPTIONS가 204임을 확인. 실제 신청이나 메시지는 전송하지 않음.
+- 운영 도메인: 기존 GitHub Pages 응답 유지. GitHub main은 변경하지 않음.
+- 통합 검사: 15개 통과. 이후 수정에서도 QA 우선 검증.
+
+후속 수정: 정적 robots.txt가 Worker보다 먼저 제공되는 것을 실서버에서 확인하여 동적 라우트로 전환한다. QA에서는 모든 크롤러를 Disallow하고, 운영 환경에서는 기존 규칙을 사용한다.

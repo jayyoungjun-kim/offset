@@ -1,3 +1,4 @@
+import { cleanDetailHtml } from "./detail-html";
 import { ApiError } from "./auth";
 import { type Program, type ContentPage } from "./program-data";
 const text = (v: unknown, max = 1000) => {
@@ -47,7 +48,9 @@ export function validateProgram(v: Record<string, unknown>): Program {
       if (!section || typeof section !== "object") throw new ApiError(400, "상세 섹션을 확인해 주세요.");
       const id = text(section.id, 80);
       if (!/^[a-z0-9-]+$/.test(id)) throw new ApiError(400, "섹션 주소를 확인해 주세요.");
-      return { id, title: text(section.title, 200), body: text(section.body, 12000) };
+      const html = section.html === undefined ? undefined : cleanDetailHtml(text(section.html, 24000));
+      if (html !== undefined && !html.trim()) throw new ApiError(400, "표시할 HTML 내용을 입력해 주세요.");
+      return { id, title: text(section.title, 200), body: html === undefined ? text(section.body,12000) : (section.body ? text(section.body,12000) : ""), ...(html!==undefined?{html}:{}) };
     });
     if (new Set(detailSections.map(s => s.id)).size !== detailSections.length)
       throw new ApiError(400, "섹션 주소는 중복할 수 없습니다.");

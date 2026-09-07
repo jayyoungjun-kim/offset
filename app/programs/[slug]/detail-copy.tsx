@@ -1,3 +1,4 @@
+import { cleanDetailHtml } from "../../lib/detail-html";
 import type { ReactNode } from "react";
 import type { DetailSection } from "../../lib/program-data";
 
@@ -21,7 +22,7 @@ function paragraphs(body: string) {
 export default function DetailCopy({sections}:{sections:DetailSection[]}) {
   return <>{sections.map(section=><section key={section.id} id={section.id} className="of-original-section">
     <h2>{section.title}</h2>
-    {section.id === "faq" ? section.body.split(/(?:^|\n)### /).filter(Boolean).map((item,i)=>{
+    {section.html !== undefined ? <div className="of-rich-html" dangerouslySetInnerHTML={{__html:cleanDetailHtml(section.html)}} /> : section.id === "faq" ? section.body.split(/(?:^|\n)### /).filter(Boolean).map((item,i)=>{
       const split=item.indexOf("\n");
       return <details key={i}><summary>{item.slice(0,split)}<span aria-hidden="true">⌄</span></summary>{paragraphs(item.slice(split).trim())}</details>;
     }) : paragraphs(section.body)}

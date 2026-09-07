@@ -1,4 +1,6 @@
 "use client";
+import HtmlEditor from "./html-editor";
+import { sectionHtml } from "../lib/detail-html";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -475,9 +477,16 @@ export default function AdminConsole({
                         <p className="of-muted">상세페이지에 표시되는 원문입니다. 제목·문단·목록과 링크를 유지하며 편집해 주세요.</p>
                         {editing.detailSections.map((section, index) => <div key={section.id} className="of-form">
                           <label>섹션 제목<input required maxLength={200} value={section.title} onChange={e=>setEditing({...editing,detailSections:editing.detailSections!.map((item,i)=>i===index?{...item,title:e.target.value}:item)})}/></label>
-                          <label>본문<textarea required rows={10} maxLength={12000} value={section.body} onChange={e=>setEditing({...editing,detailSections:editing.detailSections!.map((item,i)=>i===index?{...item,body:e.target.value}:item)})}/></label>
+                          <HtmlEditor value={section.html ?? sectionHtml(section)} onChange={html=>setEditing({...editing,detailSections:editing.detailSections!.map((item,i)=>i===index?{...item,html}:item)})} />
                         </div>)}
                       </> : <>
+                      <button type="button" className="of-button secondary" onClick={()=>setEditing({...editing,detailSections:[
+                        {id:"overview",title:"프로그램 소개",body:editing.description},
+                        {id:"outcomes",title:"학습 결과",body:editing.outcomes.map(x=>"- "+x).join("\n")},
+                        {id:"audience",title:"참여 대상",body:editing.audience.map(x=>"- "+x).join("\n")},
+                        {id:"curriculum",title:"진행 과정",body:editing.curriculum.map(x=>"- "+x).join("\n")},
+                        {id:"mentor",title:editing.mentor,body:editing.mentorBio},
+                      ]})}>기존 내용을 HTML 에디터로 편집</button>
                       {multiline("description", "프로그램 소개")}
                       {multiline("outcomes", "학습 결과 (한 줄에 한 항목)")}
                       {multiline("audience", "참여 대상 (한 줄에 한 항목)")}

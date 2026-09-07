@@ -85,11 +85,22 @@ export async function requireUser(request: Request, admin = false) {
     throw new ApiError(403, "운영자 권한이 필요합니다.");
   return user;
 }
-export async function bodyJson(request: Request) {
-  if (Number(request.headers.get("content-length") || 0) > 64000)
+export async function bodyJson(request: Request, maxBytes = 64000) {
+  if (Number(request.headers.get("content-length") || 0) > maxBytes)
     throw new ApiError(413, "입력 내용이 너무 큽니다.");
-  const text = await request.text();
-  if (text.length > 64000) throw new ApiError(413, "입력 내용이 너무 큽니다.");
+  const reader = request.body?.getReader();
+  const decoder = new TextDecoder();
+  let text = "", bytes = 0;
+  if (reader) {
+    while (true) {
+      const {done,value} = await reader.read();
+      if (done) break;
+      bytes += value.byteLength;
+      if (bytes > maxBytes) { await reader.cancel(); throw new ApiError(413, "입력 내용이 너무 큽니다."); }
+      text += decoder.decode(value,{stream:true});
+    }
+    text += decoder.decode();
+  }
   try {
     const value = JSON.parse(text);
     if (!value || typeof value !== "object" || Array.isArray(value))

@@ -1,5 +1,5 @@
 import workshopContent from "./workshop-content.json" with { type: "json" };
-export type DetailSection = { id: string; title: string; body: string };
+export type DetailSection = { id: string; title: string; body: string; html?: string };
 export type Program = {
   id: string;
   slug: string;

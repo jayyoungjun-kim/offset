@@ -20,7 +20,7 @@ export async function POST(r: Request) {
   try {
     sameOrigin(r);
     const user = await requireUser(r, true);
-    const p = validateProgram(await bodyJson(r));
+    const p = validateProgram(await bodyJson(r, 256000));
     const conflict = await database()
       .prepare("SELECT id FROM programs WHERE slug=? AND id!=?")
       .bind(p.slug, p.id)

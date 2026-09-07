@@ -1,3 +1,5 @@
+import workshopContent from "./workshop-content.json" with { type: "json" };
+export type DetailSection = { id: string; title: string; body: string };
 export type Program = {
   id: string;
   slug: string;
@@ -13,6 +15,7 @@ export type Program = {
   capacity: string;
   price: number;
   description: string;
+  detailSections?: DetailSection[];
   outcomes: string[];
   audience: string[];
   curriculum: string[];
@@ -25,6 +28,7 @@ export type Program = {
 export const seedPrograms: Program[] = [
   {
     id: "portfolio-01",
+    detailSections: workshopContent,
     slug: "portfolio-workshop",
     title: "프로덕트 디자이너\n포트폴리오 완성반",
     subtitle: "나의 경험과 역량이 분명하게 전달되는 포트폴리오.",
@@ -32,10 +36,10 @@ export const seedPrograms: Program[] = [
     status: "closed",
     format: "오프라인",
     cohort: "1기",
-    duration: "4주 · 주 1회",
+    duration: "4주 (주 1회)",
     schedule: "회당 2시간 30분~3시간",
     location: "서울 · 세부 장소 별도 안내",
-    capacity: "9명 · 그룹당 3명",
+    capacity: "9명 (그룹당 3명)",
     price: 320000,
     description:
       "어떤 프로젝트를 앞에 둘지, 설명은 어디까지 해야 할지, 지금의 완성도로 지원해도 괜찮을지. 혼자서는 무엇을 더 바꿔야 할지 판단하기 어렵습니다. 현업 프로덕트 디자인 리드이자 채용 담당자의 관점으로 현재 포트폴리오를 진단하고, 4주 동안 리뷰와 수정을 반복합니다.",

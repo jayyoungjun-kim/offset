@@ -37,7 +37,7 @@ class NumberedCanvas(canvas.Canvas):
   w,h=PAGE
   self.setStrokeColor(HexColor('#e5e6e9'));self.line(48,52,w-48,52)
   self.setFont('OffsetText',8);self.setFillColor(muted)
-  self.drawString(48,35,'OFFSET / SERVICE BLUEPRINT · 2026.09.07 · V0.1')
+  self.drawString(48,35,'OFFSET / SERVICE BLUEPRINT · 2026.09.07 · V0.2')
   self.drawRightString(w-48,35,f'{self._pageNumber:02d} / {total:02d}')
 def header(c,doc):
  c.saveState();c.setFont('Helvetica-Bold',11);c.setFillColor(ink);c.drawString(48,799,'O F F S E T')

@@ -240,7 +240,7 @@ test("duplicate slugs and invalid data rejected", async () => {
   );
 });
 test("publish and update are reflected on both list and detail", async () => {
-  p = { ...p, status: "open", price: 150000, title: "수정된 프로그램" };
+  p = { ...p, status: "open", price: 150000, title: "수정된 프로그램", detailSections: [{id:"overview",title:"운영자가 수정한 제목",body:"운영자가 저장한 상세 원문입니다."}] };
   assert.equal(
     (
       await request("/api/admin/programs", {
@@ -255,7 +255,9 @@ test("publish and update are reflected on both list and detail", async () => {
   assert.equal(d.programs.find((x) => x.id === p.id).price, 150000);
   const r = await request("/programs/test-program");
   assert.equal(r.status, 200);
-  assert.match(await r.text(), /수정된 프로그램/);
+  const html=await r.text();
+  assert.match(html, /수정된 프로그램/);
+  assert.match(html, /운영자가 저장한 상세 원문입니다/);
 });
 const application = {
   programId: "test-program",
@@ -394,4 +396,21 @@ test('legacy production compatibility is restricted to the exact old host and or
   assert.equal(isLegacyProductionRequest(new Request('https://qa.offset.quest/api/applications',{headers:{origin:'https://offset.quest'}})),false);
   assert.equal(isLegacyProductionRequest(new Request(old)),false);
   assert.equal((await request('/api/applications',{method:'OPTIONS'})).status,403);
+});
+
+
+test("workshop detail preserves every original paragraph, list item and FAQ", async () => {
+  const expected = JSON.parse(readFileSync("tests/fixtures/workshop-original-text.json", "utf8"));
+  for (const path of ["/programs/portfolio-workshop", "/workshop"]) {
+    const response = await request(path);
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    const sections = [...html.matchAll(/<section[^>]*class="of-original-section"[^>]*>([\s\S]*?)<\/section>/g)];
+    assert.equal(sections.length, 7);
+    const decoded = sections.map(m=>m[1]).join(" ").replace(/<[^>]*>/g," ")
+      .replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&#x27;|&#39;/g,"'")
+      .replace(/\s/g, "");
+    for (const text of expected) assert.ok(decoded.includes(text.replace(/\s/g,"")), `Missing original text: ${text}`);
+    assert.equal((sections[6][1].match(/<details/g)||[]).length, 9);
+  }
 });

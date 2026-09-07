@@ -471,12 +471,20 @@ export default function AdminConsole({
                     </section>
                     <section>
                       <h2>상세 콘텐츠</h2>
+                      {editing.detailSections?.length ? <>
+                        <p className="of-muted">상세페이지에 표시되는 원문입니다. 제목·문단·목록과 링크를 유지하며 편집해 주세요.</p>
+                        {editing.detailSections.map((section, index) => <div key={section.id} className="of-form">
+                          <label>섹션 제목<input required maxLength={200} value={section.title} onChange={e=>setEditing({...editing,detailSections:editing.detailSections!.map((item,i)=>i===index?{...item,title:e.target.value}:item)})}/></label>
+                          <label>본문<textarea required rows={10} maxLength={12000} value={section.body} onChange={e=>setEditing({...editing,detailSections:editing.detailSections!.map((item,i)=>i===index?{...item,body:e.target.value}:item)})}/></label>
+                        </div>)}
+                      </> : <>
                       {multiline("description", "프로그램 소개")}
                       {multiline("outcomes", "학습 결과 (한 줄에 한 항목)")}
                       {multiline("audience", "참여 대상 (한 줄에 한 항목)")}
                       {multiline("curriculum", "진행 과정 (한 줄에 한 단계)")}
                       {field("mentor", "멘토 이름")}
                       {multiline("mentorBio", "멘토 소개")}
+                      </>}
                     </section>
                     <div className="of-editor-actions">
                       <button

@@ -39,7 +39,21 @@ export function validateProgram(v: Record<string, unknown>): Program {
       400,
       "이미지는 public 폴더의 이미지 경로를 입력해 주세요.",
     );
+  let detailSections: Program["detailSections"];
+  if (v.detailSections !== undefined) {
+    if (!Array.isArray(v.detailSections) || v.detailSections.length > 20)
+      throw new ApiError(400, "상세 섹션은 최대 20개까지 입력할 수 있습니다.");
+    detailSections = v.detailSections.map((section) => {
+      if (!section || typeof section !== "object") throw new ApiError(400, "상세 섹션을 확인해 주세요.");
+      const id = text(section.id, 80);
+      if (!/^[a-z0-9-]+$/.test(id)) throw new ApiError(400, "섹션 주소를 확인해 주세요.");
+      return { id, title: text(section.title, 200), body: text(section.body, 12000) };
+    });
+    if (new Set(detailSections.map(s => s.id)).size !== detailSections.length)
+      throw new ApiError(400, "섹션 주소는 중복할 수 없습니다.");
+  }
   return {
+    ...(detailSections !== undefined ? {detailSections} : {}),
     id: v.id ? text(v.id, 100) : crypto.randomUUID(),
     slug,
     title: text(v.title, 100),

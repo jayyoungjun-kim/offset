@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 export default function ProgramHeader() {
+  const pathname=usePathname();
   const [user, setUser] = useState<{ name: string; admin: boolean } | null>(
     null,
   );
@@ -23,17 +25,18 @@ export default function ProgramHeader() {
           <img src="/offset-logo.svg" alt="OFFSET" width="142" height="32" />
         </Link>
         <nav aria-label="주요 메뉴">
-          <Link href="/programs" className="of-active">
+          <Link href="/programs" className={pathname.startsWith("/programs")?"of-active":""}>
             프로그램
           </Link>
-          <Link href="/about">About</Link>
+          <Link href="/about" className={pathname==="/about"?"of-active":""}>About</Link>
         </nav>
         <div className="of-user">
           {user?.admin && <Link href="/admin">어드민</Link>}
           <Link href={user ? "/account" : "/login"}>
-            {user ? "마이페이지" : "로그인"} <span aria-hidden="true">↗</span>
+            {user ? "마이페이지" : "회원가입/로그인"}
           </Link>
         </div>
+        <details className="of-gnb-more"><summary aria-label="메뉴 열기"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></summary><nav aria-label="모바일 메뉴"><Link href="/programs">프로그램</Link><Link href="/about">About</Link>{user?.admin&&<Link href="/admin">어드민</Link>}</nav></details>
       </div>
     </header>
   );

@@ -86,3 +86,10 @@
 - iframe 스크립트 금지는 유지하며 부모 이벤트 연결을 위해 same-origin만 허용.
 - 빌드 및 기존 18개 기능 검사, CI 통과: https://github.com/jayyoungjun-kim/offset/actions/runs/34102351369
 - 관리자 미리보기 HTTP 200 확인. 직접 입력에 대한 브라우저 상호작용 검사는 수행하지 않음.
+
+## Recruiting Carnival 오른쪽 패널
+
+- 2026-09-07, Sites v157 배포 성공, 소스 27aec7ecc45e620efbbbaf4ba80cae09e5f6aaf6.
+- recruitingGB_2_1 응답 스타일에 따라 직접 신청 영역, 아이콘 일정, 링크 복사, 운영자 설명, 한 줄 멘토 프로필 반영.
+- 기존 워크숍 내용 및 모집 상태 유지. 빌드·18개 검사 및 CI 통과: https://github.com/jayyoungjun-kim/offset/actions/runs/34102658760
+- QA 상세 HTTP 200 확인. 브라우저 픽셀 비교는 수행하지 않음.

@@ -167,3 +167,10 @@
 - 로컬 및 배포된 QA1920/1440/768/390px에서 라운드·배경·그리드·비율·가로 넘침 확인, 정렬과 상세 이동 통과.
 - 타입/빌드/기존20개 서버 테스트 CI 통과: https://github.com/jayyoungjun-kim/offset/actions/runs/34140063816
 - 시각 비교 기록: /design-qa.md, 디자인 기준: /design.md.
+
+## 리스트 데스크탑3열
+
+- 2026-09-08, Sites v167 배포 성공, 소스 3f715d87c3da9123d2c427a9b90e76fba278a638.
+- 992px 이상3열, 태블릿2열, 작은 모바일1열. 카드 디자인과4:3 썸네일 유지.
+- 1920/1440/768/390px 브라우저 그리드·비율·가로 넘침·정렬·상세 이동 검사 통과.
+- CI 성공: https://github.com/jayyoungjun-kim/offset/actions/runs/34142493685

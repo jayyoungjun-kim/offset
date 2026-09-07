@@ -1187,8 +1187,8 @@
 
 /* Wanted event GNB: 60px bar, 112px logo, 15/22px menus. */
 .of-site .of-header{height:60px;position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid #70737c14}
-.of-site .of-header .of-nav{width:min(1400px,calc(100% - 80px));height:60px;gap:0}
-.of-site .of-header .of-logo{flex:0 0 clamp(152px,12.142857vw,170px)}
+.of-site .of-header .of-nav{width:90%;max-width:1400px;height:60px;gap:0}
+.of-site .of-header .of-logo{flex:0 0 12.1428571429%;min-width:152px;max-width:170px}
 .of-site .of-header .of-logo img{width:112px;height:auto}
 .of-site .of-header .of-nav>nav{height:100%;gap:40px;align-items:stretch;font-size:15px;line-height:22px;letter-spacing:.0096em;font-weight:600}
 .of-site .of-header .of-nav>nav a{display:flex;align-items:center;font-weight:600;color:#171719}
@@ -1207,3 +1207,32 @@
  .of-site .of-header .of-gnb-more nav a{display:block;padding:12px 0;font-size:15px;line-height:22px;font-weight:600}
 }
 @media(max-width:767px){.of-site .of-header .of-nav{width:calc(100% - 40px)}.of-site .of-header .of-logo{flex:0 0 auto}.of-site .of-header .of-user>a:not(:last-child){display:none}.of-site .of-header .of-user>a:last-child{padding:7px 10px}}
+
+/* Correct parent-relative GNB measurements and responsive height. */
+.of-site .of-header{box-sizing:content-box;background:rgba(255,255,255,.88);backdrop-filter:saturate(150%) blur(32px);border-bottom-color:#70737c29}
+.of-site .of-header .of-logo{display:flex;align-items:center;height:32px}
+.of-site .of-header .of-user>a{border:0;box-shadow:inset 0 0 0 1px #70737c29;padding:7px 14px}
+.of-site .of-header .of-user>a:last-child{min-height:32px;height:32px;margin-left:12px;margin-right:8px}
+@media(max-width:991px){.of-site .of-header,.of-site .of-header .of-nav{height:56px}.of-site .of-header .of-gnb-more nav{top:56px}.of-event-support{top:68px}}
+@media(max-width:767px){.of-site .of-header .of-nav{width:100%;padding:0 20px}.of-site .of-header .of-logo{flex-basis:112px;min-width:112px}.of-site .of-header .of-user>a:last-child{padding:7px 14px}.of-gnb-more{margin-left:0;margin-right:-8px}}
+
+/* Match the reference action-group geometry, with working OFFSET actions. */
+.of-site .of-header .of-user{gap:0}
+.of-site .of-header .of-user a.of-gnb-login{display:inline-flex;align-items:center;justify-content:center;min-height:32px;height:32px;padding:7px 14px;margin:0 8px 0 12px;box-shadow:inset 0 0 0 1px #70737c29}
+.of-site .of-header .of-user a.of-gnb-login span{margin:0}
+.of-site .of-header .of-user a.of-gnb-login .of-gnb-login-desktop{display:inline}.of-site .of-header .of-user a.of-gnb-login .of-gnb-login-mobile{display:none}
+.of-site .of-header .of-user a.of-gnb-contact{width:88.875px;height:32px;min-height:32px;margin:0;padding:7px 0;display:flex;align-items:center;justify-content:center}
+.of-site .of-header .of-gnb-search{display:flex;align-items:center;justify-content:center;width:24px;height:24px;padding:0;margin:0 8px;background:none;border:0;color:#171719;flex-shrink:0}
+.of-site .of-header .of-gnb-more{display:none;margin:0 8px}
+.of-site .of-header .of-gnb-more summary{width:24px;height:24px}
+.of-gnb-search-dialog{width:min(520px,calc(100% - 40px));border:1px solid #70737c29;border-radius:16px;padding:24px;color:#171719;background:#fff;max-height:80vh}.of-gnb-search-dialog::backdrop{background:#0005}.of-gnb-search-dialog form{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}.of-gnb-search-dialog form button{background:none;border:0;font-size:28px}.of-gnb-search-dialog input{width:100%;padding:12px;border:1px solid #70737c29;border-radius:8px}.of-gnb-search-dialog a{display:block;padding:16px 0;border-bottom:1px solid #70737c14;white-space:normal}.of-gnb-search-dialog p{white-space:normal}
+@media(max-width:991px){
+ .of-site .of-header .of-user a.of-gnb-contact{display:none}
+ .of-site .of-header .of-user a.of-gnb-login{display:flex;order:-1;margin:0 12px 0 0}
+ .of-site .of-header .of-user a.of-gnb-login .of-gnb-login-desktop{display:none}.of-site .of-header .of-user a.of-gnb-login .of-gnb-login-mobile{display:inline}
+ .of-site .of-header .of-gnb-more{display:block;margin:0 0 0 8px}
+ .of-site .of-header .of-nav{padding-right:0}
+}
+@media(max-width:767px){.of-site .of-header .of-nav{padding:0 12px 0 20px}.of-site .of-header .of-logo{flex-basis:12.1428571429%;min-width:152px}}
+@media(max-width:767px){.of-site .of-header .of-gnb-more{margin-right:8px}}
+@media(max-width:359px){.of-site .of-header .of-logo{min-width:112px}}

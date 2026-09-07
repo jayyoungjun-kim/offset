@@ -89,6 +89,6 @@ export default function RootLayout({children}:{children:React.ReactNode}) {
       <script async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`} />
       <script dangerouslySetInnerHTML={{__html:`window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments);};gtag('js',new Date());gtag('config','${measurementId}');`}} />
     </> : null}</head>
-    <body>{isQa && <div className="qa-environment-banner" role="note"><strong>OFFSET QA</strong><span>개발·검증 환경입니다.</span><a href="/programs">프로그램</a><a href="/admin/preview">어드민 미리보기 ↗</a></div>}<script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(organizationJsonLd)}} />{children}{!isQa && <ChannelTalk />}</body>
+    <body><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(organizationJsonLd)}} />{children}{isQa && <div className="qa-environment-banner" role="note"><strong>OFFSET QA</strong><span>개발·검증 환경입니다.</span><a href="/programs">프로그램</a><a href="/admin/preview">어드민 미리보기 ↗</a></div>}{!isQa && <ChannelTalk />}</body>
   </html>;
 }

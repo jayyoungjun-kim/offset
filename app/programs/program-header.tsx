@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import ProgramSearch from "./program-search";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 export default function ProgramHeader() {
@@ -31,10 +32,12 @@ export default function ProgramHeader() {
           <Link href="/about" className={pathname==="/about"?"of-active":""}>About</Link>
         </nav>
         <div className="of-user">
+          <ProgramSearch />
           {user?.admin && <Link href="/admin">어드민</Link>}
-          <Link href={user ? "/account" : "/login"}>
-            {user ? "마이페이지" : "회원가입/로그인"}
+          <Link className="of-gnb-login" href={user ? "/account" : "/login"}>
+            {user ? "마이페이지" : <><span className="of-gnb-login-desktop">회원가입/로그인</span><span className="of-gnb-login-mobile">회원가입</span></>}
           </Link>
+          <a className="of-gnb-contact" href="mailto:offset.learn@gmail.com">워크숍 문의</a>
         </div>
         <details className="of-gnb-more"><summary aria-label="메뉴 열기"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></summary><nav aria-label="모바일 메뉴"><Link href="/programs">프로그램</Link><Link href="/about">About</Link>{user?.admin&&<Link href="/admin">어드민</Link>}</nav></details>
       </div>

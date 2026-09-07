@@ -1,4 +1,4 @@
-import { POST as submitEnrollment } from '../enrollments/route';
+import {submitEnrollment} from '../../lib/enrollments';
 import * as legacy from '../../lib/legacy-applications';
 import {isLegacyProductionRequest} from '../../lib/environment';
 // The live static production form still calls the old Sites hostname.

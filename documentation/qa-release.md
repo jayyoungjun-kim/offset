@@ -70,3 +70,11 @@
 - 저장된 순서 그대로 상세에 표시하며 모든 섹션을 삭제해도 이전 본문을 복원하지 않음.
 - 저장·재조회·순서·삭제·빈 배열 반영 포함 18개 검사 및 CI 통과: https://github.com/jayyoungjun-kim/offset/actions/runs/34101319985
 - QA 관리자 미리보기 HTTP 200 확인. 미리보기 저장 제한과 Google 관리자 로그인 설정 필요 상태는 유지.
+
+## 오른쪽 패널 타이포그래피·간격
+
+- 2026-09-07, Sites v154 배포 성공, 소스 eec367556d0174cca3fcf415d59e5f627baa5d8c.
+- 원티드 Global_guidebook 실제 응답의 스타일 수치 기준으로 제목·일정·신청·운영자·멘토·태그의 글자와 여백 반영. OFFSET 본문과 신청 기능은 보존.
+- 모바일 992px 전환과 24/32px 제목, 데스크탑 28/38px 제목 및 360px 패널 반영.
+- 빌드 및 18개 기능 검사 통과. CI: https://github.com/jayyoungjun-kim/offset/actions/runs/34101831055
+- QA 상세 HTTP 200 확인. 브라우저 픽셀 비교 검사는 수행하지 않음.

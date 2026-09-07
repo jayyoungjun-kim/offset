@@ -65,6 +65,7 @@ export async function currentUser(request: Request): Promise<User | null> {
   return { ...row, admin: admins.includes(row.email.toLowerCase()) };
 }
 export class ApiError extends Error {
+  readonly name = "OffsetApiError";
   constructor(
     public status: number,
     message: string,
@@ -108,8 +109,12 @@ export function json(data: unknown, status = 200) {
   });
 }
 export function fail(error: unknown) {
-  if (error instanceof ApiError)
+  // Workers can load the same server module through different bundled entries.
+  // Match the explicit error identity instead of a bundle-local constructor.
+  if (error instanceof Error && error.name === "OffsetApiError" && "status" in error
+      && typeof error.status === "number" && [400,401,403,404,409,413].includes(error.status))
     return json({ error: error.message }, error.status);
+  console.error("OFFSET API failure", error);
   return json(
     { error: "저장소에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요." },
     503,

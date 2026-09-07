@@ -172,14 +172,10 @@ test("csrf and anonymous enrollment are rejected", async () => {
     ).status,
     403,
   );
-  assert.equal(
-    (await request("/api/enrollments", { method: "POST", body: {} })).status,
-    401,
-  );
-  assert.equal(
-    (await request("/api/applications", { method: "POST", body: {} })).status,
-    401,
-  );
+  const anonymous = await request("/api/enrollments", {method:"POST",body:{}});
+  assert.equal(anonymous.status, 401, (await anonymous.text()) + "\n" + logs);
+  const legacyAnonymous = await request("/api/applications", {method:"POST",body:{}});
+  assert.equal(legacyAnonymous.status, 401, (await legacyAnonymous.text()) + "\n" + logs);
 });
 let p = {
   ...seedPrograms[0],

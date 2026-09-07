@@ -35,3 +35,12 @@
 - GitHub 검사: https://github.com/jayyoungjun-kim/offset/actions/runs/34087101845.
 - QA HTTP 응답에서 원문 섹션과 FAQ, 실제 WOFF2 폰트 제공 확인.
 - 기존 운영 offset.quest 배포는 수행하지 않음.
+
+## 이벤트형 상세 / 블랙 Primary
+
+- 2026-09-07: Sites v150 배포 성공, 소스 8f4df92093cf1eded167fbe392956c0ff6fa482d.
+- 참고: https://event.wanted.co.kr/Global_guidebook
+- 왼쪽 대표 이미지·본문 / 오른쪽 등록·운영자·멘토 구조. 모바일 단일 열 및 하단 신청.
+- Primary #000000, Pretendard 및 원문 7개 섹션 유지.
+- CI 16개 검사 통과: https://github.com/jayyoungjun-kim/offset/actions/runs/34087896204
+- QA 실제 응답에서 새 구조 및 원문 섹션 확인. 운영 도메인 배포는 수행하지 않음.

@@ -123,7 +123,13 @@ before(
     for (let n = 0; n < 80; n++) {
       try {
         const r = await request("/api/auth/session");
-        if (r.ok) return;
+        if (r.ok) {
+          // Wrangler may replace its initial Worker after the first ready event.
+          // Let startup settle before sending non-retryable mutation requests.
+          await new Promise((ready) => setTimeout(ready, 2000));
+          const settled = await request("/api/auth/session");
+          if (settled.ok) return;
+        }
       } catch {}
       await new Promise((r) => setTimeout(r, 250));
     }

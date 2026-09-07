@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import ProgramSearch from "./program-search";
+import SiteFooter from "../site-footer";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 export default function ProgramHeader() {
@@ -45,14 +46,5 @@ export default function ProgramHeader() {
   );
 }
 export function ProgramFooter() {
-  return (
-    <footer className="of-footer of-wrap">
-      <img src="/offset-logo.svg" alt="OFFSET" width="110" height="25" />
-      <p>배우고, 다듬고, 함께 나아갑니다.</p>
-      <div>
-        <a href="mailto:offset.learn@gmail.com">문의하기 ↗</a>
-        <span>© {new Date().getFullYear()} OFFSET</span>
-      </div>
-    </footer>
-  );
+  return <SiteFooter />;
 }

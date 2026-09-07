@@ -93,3 +93,10 @@
 - recruitingGB_2_1 응답 스타일에 따라 직접 신청 영역, 아이콘 일정, 링크 복사, 운영자 설명, 한 줄 멘토 프로필 반영.
 - 기존 워크숍 내용 및 모집 상태 유지. 빌드·18개 검사 및 CI 통과: https://github.com/jayyoungjun-kim/offset/actions/runs/34102658760
 - QA 상세 HTTP 200 확인. 브라우저 픽셀 비교는 수행하지 않음.
+
+## GNB 스타일
+
+- 2026-09-07, Sites v158 배포 성공, 소스 e453b00aa9954e99cf1f4c0df261ee78c68afe88.
+- 원티드 이벤트 GNB 기준 60px 높이, 112px 로고, 15/22px 메뉴, 40px 간격, 로그인 테두리 버튼과 모바일 햄버거 메뉴 적용.
+- 기존 18개 검사 및 CI 통과: https://github.com/jayyoungjun-kim/offset/actions/runs/34102946926
+- QA 목록 HTTP 200 확인. 브라우저 상호작용 및 픽셀 비교는 수행하지 않음.

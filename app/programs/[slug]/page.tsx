@@ -88,15 +88,9 @@ export default async function Detail({
               </div>
             </div>
             <div className="of-event-support">
-              <div className="of-event-organizer">
-                <Link className="of-event-organizer-heading" href="/about"><span className="of-event-avatar"><img src="/offset-logo.svg" width="32" height="16" alt="" /></span><strong>OFFSET</strong></Link>
-                <p className="of-event-organizer-description">배우고, 다듬고, 함께 나아갑니다.</p>
-                <a className="of-event-contact" href="mailto:offset.learn@gmail.com">문의하기 ↗</a>
-              </div>
               <div className="of-event-mentor">
                 <h2>멘토 소개</h2>
-                <div className="of-event-mentor-row"><span className="of-event-avatar of-event-person" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg></span><div className="of-event-mentor-profile"><strong>{p.mentor}</strong><p title={p.mentorBio}>{p.mentorBio}</p></div></div>
-                <a href="#mentor">자세히 보기 ↓</a>
+                <a className="of-event-mentor-row" href="#mentor" aria-label="멘토 소개 자세히 보기"><span className="of-event-avatar of-event-person" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg></span><div className="of-event-mentor-profile"><strong>{p.mentor}</strong><p>{p.mentorBio.split(".")[0]}</p></div></a>
                 <div className="of-event-tags"><span>{p.category}</span><span>{p.format}</span><span>{p.cohort}</span></div>
               </div>
             </div>

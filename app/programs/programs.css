@@ -1236,3 +1236,30 @@
 @media(max-width:767px){.of-site .of-header .of-nav{padding:0 12px 0 20px}.of-site .of-header .of-logo{flex-basis:12.1428571429%;min-width:152px}}
 @media(max-width:767px){.of-site .of-header .of-gnb-more{margin-right:8px}}
 @media(max-width:359px){.of-site .of-header .of-logo{min-width:112px}}
+
+/* Shared page canvas, measured from Wanted responsive event detail. */
+.of-site .of-header{box-sizing:border-box}
+.of-detail-site .of-event-layout,.of-catalog-site .of-catalog{width:calc(100% - 120px);max-width:1080px;margin:0 auto;padding-top:60px;padding-bottom:142px}
+.of-detail-site .of-event-layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;column-gap:6.48%;row-gap:0;align-items:start}
+.of-detail-site .of-event-poster .of-program-artwork{border-radius:16px}
+.of-detail-site .of-event-copy{padding-top:100px}
+.of-detail-site .of-event-copy .of-original-section:first-child{padding-top:0}
+.of-detail-site .of-event-support{max-width:360px}
+.of-detail-site .of-event-mentor{display:flex;flex-direction:column;gap:20px;padding:20px}
+.of-detail-site .of-event-mentor h2{margin:0;font-size:14px;line-height:20px;font-weight:600}
+.of-detail-site .of-event-mentor>a.of-event-mentor-row{display:flex;gap:12px;align-items:center;margin:0;text-decoration:none;color:#171719}
+.of-detail-site .of-event-mentor-profile>p{font-size:14px;line-height:20px;font-weight:400;letter-spacing:.0145em;color:#37383c9c}
+.of-detail-site .of-event-tags{margin:0;padding-top:20px}
+@media(min-width:1600px){.of-detail-site .of-event-layout,.of-catalog-site .of-catalog{max-width:1400px}.of-detail-site .of-event-layout{grid-template-columns:minmax(0,1fr) 500px;column-gap:7.14%}}
+@media(min-width:992px) and (max-width:1199px){.of-detail-site .of-event-copy{padding-top:80px}}
+@media(max-width:991px){
+ .of-detail-site .of-event-layout,.of-catalog-site .of-catalog{width:90%;max-width:none;padding-top:20px}
+ .of-detail-site .of-event-layout{display:flex;flex-direction:column;gap:0}
+ .of-detail-site .of-event-registration{padding-top:24px}
+ .of-detail-site .of-event-copy{padding-top:28px}
+ .of-detail-site .of-event-support{max-width:none;margin-top:40px}
+ .of-detail-site .of-event-mentor-profile>p{font-size:13px;line-height:18px}
+}
+@media(max-width:375px){.of-detail-site .of-event-layout,.of-catalog-site .of-catalog{width:calc(100% - 40px)}}
+.of-detail-site .of-event-poster .of-program-artwork{aspect-ratio:4/3}
+@media(max-width:991px){.of-detail-site .of-event-support{order:3;margin-top:52px}.of-detail-site .of-event-copy{order:4}}

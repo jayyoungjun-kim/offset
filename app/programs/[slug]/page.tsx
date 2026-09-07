@@ -57,23 +57,14 @@ export default async function Detail({
   return (
     <div className="of-site of-detail-site">
       <ProgramHeader />
-      <main className="of-wrap of-detail wanted-detail">
-        <div className="of-gallery" aria-label="워크숍 이미지">
-          <div className="of-gallery-brand"><img src="/offset-branding.png" alt="OFFSET" /></div>
-          <div className="of-gallery-icon"><img src={p.image} alt="포트폴리오 워크숍" /></div>
-          <div className="of-gallery-wordmark"><img src="/offset-about-wordmark.svg" alt="OFFSET" /></div>
-        </div>
-        <div className="of-wanted-columns">
-          <article className="of-wanted-content">
-            <header className="of-wanted-title">
-              <p><Link href="/programs">OFFSET</Link><span>·</span>{p.format}<span>·</span>{p.cohort}</p>
-              <h1>{p.title.replace("\n", " ")}</h1>
-            </header>
-            <dl className="of-wanted-summary">
-              <div><dt>모집 인원</dt><dd>{p.capacity}</dd></div>
-              <div><dt>모집 현황</dt><dd>{statusLabel[p.status]}</dd></div>
-              <div><dt>진행 방식</dt><dd>{p.duration}</dd></div>
-            </dl>
+      <main className="of-wrap of-event-layout">
+        <article className="of-event-article">
+          <div className="of-event-poster" aria-label={p.title.replace("\n", " ")}>
+            <img className="of-event-wordmark" src="/offset-logo.svg" alt="OFFSET" />
+            <p>{p.title.replace("\n", " ")}</p>
+            <div><span>{p.cohort} · {p.format}</span><img src={p.image} width="108" height="108" alt="" /></div>
+          </div>
+          <div className="of-event-copy">
             {p.detailSections?.length ? <DetailCopy sections={p.detailSections} /> : <DetailCopy sections={[
               {id:"overview",title:"프로그램 소개",body:p.description},
               {id:"outcomes",title:"학습 결과",body:p.outcomes.map(x=>"- "+x).join("\n")},
@@ -81,19 +72,38 @@ export default async function Detail({
               {id:"curriculum",title:"진행 과정",body:p.curriculum.map((x,i)=>`${i+1}. ${x}`).join("\n")},
               {id:"mentor",title:p.mentor,body:p.mentorBio},
             ]} />}
-          </article>
-          <aside className="of-wanted-aside" aria-label="워크숍 신청">
-            <div className="of-wanted-sticky">
-              <ApplicationAction program={p} unavailable={offline} />
-              <div className="of-wanted-info">
-                <p className="of-wanted-cohort">{p.cohort} {statusLabel[p.status]}</p>
-                <h2>{p.title.replace("\n", " ")}</h2>
-                <dl><div><dt>진행기간</dt><dd>{p.duration}</dd></div><div><dt>참가비</dt><dd>{money(p.price)}</dd></div></dl>
-                <a href="#application">신청 절차 <span aria-hidden="true">↓</span></a>
+          </div>
+        </article>
+        <aside className="of-event-sidebar" aria-label="워크숍 정보 및 신청">
+          <div className="of-event-sidebar-inner">
+            <div className="of-event-registration">
+              <div className="of-event-badges"><span>{p.category}</span><span>{p.price ? "유료" : "무료"}</span></div>
+              <h1>{p.title.replace("\n", " ")}</h1>
+              <dl className="of-event-schedule">
+                <div><dt>진행기간</dt><dd>{p.duration}</dd></div>
+                <div><dt>진행시간</dt><dd>{p.schedule}</dd></div>
+                <div><dt>진행 장소</dt><dd>{p.location}</dd></div>
+              </dl>
+              <div className="of-event-enrollment">
+                <p>{p.cohort} {statusLabel[p.status]}</p>
+                <dl><div><dt>모집 인원</dt><dd>{p.capacity}</dd></div><div><dt>참가비</dt><dd>{money(p.price)}</dd></div></dl>
+                <ApplicationAction program={p} unavailable={offline} />
               </div>
             </div>
-          </aside>
-        </div>
+            <div className="of-event-support">
+              <div className="of-event-organizer">
+                <Link href="/about"><img src="/offset-logo.svg" width="100" height="20" alt="OFFSET" /></Link>
+                <a className="of-event-contact" href="mailto:offset.learn@gmail.com">문의하기 ↗</a>
+              </div>
+              <div className="of-event-mentor">
+                <h2>멘토 소개</h2>
+                <p>{p.mentorBio}</p>
+                <a href="#mentor">자세히 보기 ↓</a>
+                <div className="of-event-tags"><span>{p.category}</span><span>{p.format}</span><span>{p.cohort}</span></div>
+              </div>
+            </div>
+          </div>
+        </aside>
       </main>
       <ProgramFooter />
     </div>

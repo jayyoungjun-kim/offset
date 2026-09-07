@@ -18,7 +18,7 @@ pdfmetrics.registerFont(TTFont('OffsetText',str(FONT)))
 OUT=ROOT/'output/pdf/offset-service-blueprint.pdf'
 OUT.parent.mkdir(parents=True,exist_ok=True)
 PAGE=(595.28,841.89)
-ink=HexColor('#1b1c1e');muted=HexColor('#696c73');blue=HexColor('#2449eb')
+ink=HexColor('#1b1c1e');muted=HexColor('#696c73');blue=HexColor('#000000')
 styles={
  'title':ParagraphStyle('title',fontName='OffsetText',fontSize=28,leading=40,textColor=ink,spaceAfter=24,wordWrap='CJK'),
  'h2':ParagraphStyle('h2',fontName='OffsetText',fontSize=13,leading=21,textColor=blue,spaceBefore=19,spaceAfter=9,wordWrap='CJK',keepWithNext=True),
@@ -37,7 +37,7 @@ class NumberedCanvas(canvas.Canvas):
   w,h=PAGE
   self.setStrokeColor(HexColor('#e5e6e9'));self.line(48,52,w-48,52)
   self.setFont('OffsetText',8);self.setFillColor(muted)
-  self.drawString(48,35,'OFFSET / SERVICE BLUEPRINT · 2026.09.07 · V0.2')
+  self.drawString(48,35,'OFFSET / SERVICE BLUEPRINT · 2026.09.07 · V0.3')
   self.drawRightString(w-48,35,f'{self._pageNumber:02d} / {total:02d}')
 def header(c,doc):
  c.saveState();c.setFont('Helvetica-Bold',11);c.setFillColor(ink);c.drawString(48,799,'O F F S E T')
@@ -61,7 +61,7 @@ for part in blocks:
  elif part.startswith('## '):story.append(Paragraph(escape(part[3:]),styles['h2']))
  else:
   txt=escape(part).replace('\n','<br/>')
-  txt=re.sub(r'(https://[^\s<]+)',r'<link href="\1" color="#2449eb">\1</link>',txt)
+  txt=re.sub(r'(https://[^\s<]+)',r'<link href="\1" color="#000000">\1</link>',txt)
   story.append(Paragraph(txt,styles['url' if part.startswith('https://') else 'body']))
 doc=SimpleDocTemplate(str(OUT),pagesize=PAGE,rightMargin=48,leftMargin=48,topMargin=77,bottomMargin=72,title='OFFSET Service Blueprint',author='OFFSET',subject='서비스 전략, 제품 구조, 디자인과 운영 기반')
 doc.build(story,onFirstPage=header,onLaterPages=header,canvasmaker=NumberedCanvas)

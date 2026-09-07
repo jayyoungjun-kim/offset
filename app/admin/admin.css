@@ -40,7 +40,7 @@
 }
 .of-admin-sidebar nav button.active {
   background: #edf0ff;
-  color: #2449eb;
+  color: #000000;
   font-weight: 600;
 }
 .of-admin-sidebar nav button span {
@@ -279,7 +279,7 @@
 }
 .of-application a {
   font-size: 14px;
-  color: var(--of-blue);
+  color: var(--of-primary);
 }
 .of-settings {
   background: white;
@@ -318,7 +318,7 @@
   margin: 20px 12px 0 0;
 }
 .of-admin .of-notice a {
-  color: var(--of-blue);
+  color: var(--of-primary);
   text-decoration: underline;
 }
 @media (max-width: 1000px) {

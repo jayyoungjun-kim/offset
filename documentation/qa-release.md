@@ -62,3 +62,11 @@
 - GitHub CI: https://github.com/jayyoungjun-kim/offset/actions/runs/34100369199
 - QA 관리자 미리보기 HTTP 200 확인. 실제 저장에는 Google OAuth 및 관리자 이메일 설정이 필요함.
 - 실행 코드가 없는 이 배포 기록 커밋은 별도 재배포하지 않음.
+
+## 상세 섹션 추가·삭제·정렬
+
+- 2026-09-07, Sites v153 배포 성공, 소스 c18aa46b70f0f014db672477c45ef4a641d8c9b1.
+- 최대 20개 섹션 추가, 삭제 및 직전 삭제 되돌리기, 마우스·터치 드래그 정렬과 키보드/위·아래 이동 제공.
+- 저장된 순서 그대로 상세에 표시하며 모든 섹션을 삭제해도 이전 본문을 복원하지 않음.
+- 저장·재조회·순서·삭제·빈 배열 반영 포함 18개 검사 및 CI 통과: https://github.com/jayyoungjun-kim/offset/actions/runs/34101319985
+- QA 관리자 미리보기 HTTP 200 확인. 미리보기 저장 제한과 Google 관리자 로그인 설정 필요 상태는 유지.

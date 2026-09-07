@@ -1108,7 +1108,6 @@
 .of-original-section p,.of-original-section li{color:#444;line-height:1.9}
 .of-original-section h3{font-size:18px;margin-top:28px}
 .of-original-section+section{margin-top:8px}
-.of-footer{padding-top:28px;padding-bottom:32px;border-top-color:#eee}
 @media(max-width:1000px){.of-event-layout{gap:36px;grid-template-columns:minmax(0,1fr) 310px}.of-event-poster .of-program-artwork{padding:28px}.of-event-registration h1{font-size:24px}}
 @media(max-width:767px){
  .of-catalog-site .of-wrap,.of-detail-site .of-wrap{width:calc(100% - 40px)}

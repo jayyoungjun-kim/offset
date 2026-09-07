@@ -130,3 +130,10 @@
 - 배포된 QA에서 샘플 어드민→회원 상태 반영, 신청서 열기, 프로필, 모바일 가로 넘침, 4/2/1열, 정렬 변경 브라우저 검사 통과.
 - 기존18개 권한/저장 검사 및 CI 통과: https://github.com/jayyoungjun-kim/offset/actions/runs/34128880813
 - Google OAuth와 관리자 이메일 설정은 별도로 필요. 상세 설계: member-experience.md.
+
+## 현 운영 푸터 반영
+
+- 2026-09-08, Sites v162 배포 성공, 소스 d55673fc576c8fc6ed99cbc33ba54da56e762db0.
+- offset.quest/workshop/ 현 푸터와 동일한 SiteFooter 재사용. 운영자·연락처·사업자 정보 원문 유지.
+- 배포 후1440/390px 브라우저에서 운영과 QA의 문구, 배경색, 상하패딩, 글자크기/줄높이, 내부 x/너비 동일함을 확인.
+- CI 통과: https://github.com/jayyoungjun-kim/offset/actions/runs/34137165749

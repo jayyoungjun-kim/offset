@@ -14,3 +14,13 @@
 - 통합 검사: 15개 통과. 이후 수정에서도 QA 우선 검증.
 
 후속 수정: 정적 robots.txt가 Worker보다 먼저 제공되는 것을 실서버에서 확인하여 동적 라우트로 전환한다. QA에서는 모든 크롤러를 Disallow하고, 운영 환경에서는 기존 규칙을 사용한다.
+
+## 검증 완료 버전
+
+- 최종 QA 배포: Sites v147, 소스 b15d81cac67ed17322446c8bb37b787182dcfba8.
+- 배포 성공: 2026-09-07 14:18 KST.
+- GitHub Actions: https://github.com/jayyoungjun-kim/offset/actions/runs/34086171936 — 타입 검사, 빌드, 통합 검사 15개 통과.
+- 최종 HTTP 확인: 리스트 200 및 noindex, robots.txt 전체 Disallow, 미인증 신청 401.
+- Linux 검사 환경의 업로드 조기 응답 문제를 요청 본문 처리 순서로 해결했다.
+- Google OAuth 자격 정보와 관리자 이메일 설정은 아직 필요하다.
+- 이 배포 기록만 추가한 후속 커밋은 실행 코드 변경이 없어 재배포하지 않는다.

@@ -1,0 +1,11 @@
+import type { Program } from "../lib/program-data";
+export default function ProgramCover({program:p}:{program:Program}) {
+  return <div className="of-program-artwork" aria-hidden="true">
+    <div className="of-artwork-top"><img src="/offset-logo.svg" alt=""/><span>{p.category} / {p.cohort}</span></div>
+    <p>{p.title.split("\n").map((line,i)=><span key={i}>{line}</span>)}</p>
+    <img className="of-artwork-object" src={p.image} alt="" width="200" height="200" />
+    <div className="of-artwork-bottom"><span>{p.format} · {p.duration}</span><span>OFFSET</span></div>
+  </div>;
+}
+export function CalendarIcon(){return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v5m8-5v5M4 11h16"/></svg>}
+export function TagIcon(){return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="m12 3-9 9a2 2 0 0 0 0 3l6 6a2 2 0 0 0 3 0l9-9V5a2 2 0 0 0-2-2h-7Z"/><circle cx="16.5" cy="7.5" r="1"/></svg>}

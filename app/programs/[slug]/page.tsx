@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { getProgram } from "../../lib/store";
 import { money, statusLabel } from "../../lib/program-data";
 import ProgramHeader, { ProgramFooter } from "../program-header";
+import ProgramCover from "../program-cover";
 import DetailCopy from "./detail-copy";
 import ApplicationAction from "./application-action";
 export const dynamic = "force-dynamic";
@@ -59,11 +60,7 @@ export default async function Detail({
       <ProgramHeader />
       <main className="of-wrap of-event-layout">
         <article className="of-event-article">
-          <div className="of-event-poster" aria-label={p.title.replace("\n", " ")}>
-            <img className="of-event-wordmark" src="/offset-logo.svg" alt="OFFSET" />
-            <p>{p.title.replace("\n", " ")}</p>
-            <div><span>{p.cohort} · {p.format}</span><img src={p.image} width="108" height="108" alt="" /></div>
-          </div>
+          <div className="of-event-poster"><ProgramCover program={p} /></div>
           <div className="of-event-copy">
             {p.detailSections?.length ? <DetailCopy sections={p.detailSections} /> : <DetailCopy sections={[
               {id:"overview",title:"프로그램 소개",body:p.description},

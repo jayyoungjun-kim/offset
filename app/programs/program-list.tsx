@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import ProgramHeader, { ProgramFooter } from "./program-header";
-import ProgramCover, {CalendarIcon, TagIcon} from "./program-cover";
+import ProgramCover from "./program-cover";
 import { type Program, statusLabel } from "../lib/program-data";
 export default function ProgramList({initialPrograms,initiallyUnavailable=false}:{initialPrograms:Program[];initiallyUnavailable?:boolean}) {
   const sortMenu=useRef<HTMLDetailsElement>(null);
@@ -22,10 +22,11 @@ export default function ProgramList({initialPrograms,initiallyUnavailable=false}
       <div className="of-event-grid">
         {results.map(p=><Link key={p.id} href={`/programs/${p.slug}`} className="of-event-card">
           <ProgramCover program={p}/>
-          <h2>{p.title.replace("\n"," ")}</h2>
-          <p className="of-event-card-meta"><CalendarIcon/><span>{p.duration}<i/> {p.format}</span></p>
-          <p className="of-event-card-meta"><TagIcon/><span>{p.category}, {p.cohort}, {p.price ? "유료" : "무료"}</span></p>
-          <span className={`of-card-state ${p.status}`}>{statusLabel[p.status]}</span>
+          <div className="of-event-card-body">
+            <p className="of-event-card-kicker">{p.category} · {p.format}</p>
+            <h2>{p.title.replace("\n"," ")}</h2>
+            <div className="of-event-card-footer"><span>{p.cohort} · {p.duration}</span><span className={`of-card-state ${p.status}`}>{statusLabel[p.status]}</span></div>
+          </div>
         </Link>)}
       </div>
       {!results.length&&!loading&&!error&&<div className="of-empty"><h2>등록된 프로그램이 없습니다.</h2></div>}

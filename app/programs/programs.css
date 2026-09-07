@@ -1290,3 +1290,20 @@
 /* One complete uploaded image; no decorative cover or text overlays. */
 .of-site .of-program-artwork.of-image-cover{position:relative;display:block;padding:0;aspect-ratio:4/3;background:#f5f5f5;border:1px solid #eee;overflow:hidden}
 .of-site .of-program-artwork.of-image-cover>img{display:block;width:100%;height:100%;object-fit:contain;transform:none;position:static;opacity:1}
+
+/* Reference-led rounded white list cards on a quiet gray canvas. */
+.of-site.of-catalog-site{background:#f5f5f5}
+.of-catalog-site .of-event-grid{align-items:stretch;gap:32px 24px}
+.of-catalog-site .of-event-card{display:flex;flex-direction:column;padding:10px;border-radius:28px;background:#fff;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease;color:#171719;text-decoration:none}
+.of-catalog-site .of-event-card .of-image-cover{width:100%;border:0;border-radius:20px;background:#eeeef0;flex-shrink:0}
+.of-catalog-site .of-event-card-body{display:flex;flex-direction:column;flex:1;padding:20px 10px 12px}
+.of-catalog-site .of-event-card-kicker{margin:0 0 8px;color:#737780;font-size:14px;line-height:20px;font-weight:400;letter-spacing:-.02em}
+.of-catalog-site .of-event-card h2{margin:0;color:#171719;font-size:18px;line-height:26px;font-weight:650;letter-spacing:-.03em;word-break:keep-all;overflow-wrap:anywhere;text-decoration:none}
+.of-catalog-site .of-event-card-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:20px;font-size:12px;line-height:18px;color:#737780}
+.of-catalog-site .of-event-card-footer .of-card-state{margin:0;padding:0;background:transparent;color:#737780;font-size:12px;line-height:18px;white-space:nowrap}
+.of-catalog-site .of-event-card-footer .of-card-state.open{color:#247a3c}
+.of-catalog-site .of-event-card:focus-visible{outline:2px solid #111;outline-offset:5px}
+@media(hover:hover){.of-catalog-site .of-event-card:hover{transform:translateY(-4px);box-shadow:0 10px 30px #17171908}.of-catalog-site .of-event-card:hover h2{text-decoration:none}}
+@media(max-width:991px){.of-catalog-site .of-event-grid{gap:24px 20px}}
+@media(max-width:479px){.of-catalog-site .of-event-card{border-radius:28px}.of-catalog-site .of-event-card-body{padding:22px 18px 18px}.of-catalog-site .of-event-card h2{font-size:20px;line-height:28px}}
+@media(prefers-reduced-motion:reduce){.of-catalog-site .of-event-card{transition:none}.of-catalog-site .of-event-card:hover{transform:none}}

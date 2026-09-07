@@ -89,12 +89,12 @@ export default async function Detail({
             </div>
             <div className="of-event-support">
               <div className="of-event-organizer">
-                <Link href="/about"><img src="/offset-logo.svg" width="100" height="20" alt="OFFSET" /></Link>
+                <Link className="of-event-organizer-heading" href="/about"><span className="of-event-avatar"><img src="/offset-logo.svg" width="32" height="16" alt="" /></span><strong>OFFSET</strong></Link>
                 <a className="of-event-contact" href="mailto:offset.learn@gmail.com">문의하기 ↗</a>
               </div>
               <div className="of-event-mentor">
                 <h2>멘토 소개</h2>
-                <p>{p.mentorBio}</p>
+                <div className="of-event-mentor-profile"><strong>{p.mentor}</strong><p>{p.mentorBio}</p></div>
                 <a href="#mentor">자세히 보기 ↓</a>
                 <div className="of-event-tags"><span>{p.category}</span><span>{p.format}</span><span>{p.cohort}</span></div>
               </div>

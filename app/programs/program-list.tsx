@@ -23,9 +23,9 @@ export default function ProgramList({initialPrograms,initiallyUnavailable=false}
         {results.map(p=><Link key={p.id} href={`/programs/${p.slug}`} className="of-event-card">
           <ProgramCover program={p}/>
           <div className="of-event-card-body">
-            <p className="of-event-card-kicker">{p.category} · {p.format}</p>
+            <p className="of-event-card-kicker">{p.category}</p>
             <h2>{p.title.replace("\n"," ")}</h2>
-            <div className="of-event-card-footer"><span>{p.cohort} · {p.duration}</span><span className={`of-card-state ${p.status}`}>{statusLabel[p.status]}</span></div>
+            <div className="of-event-card-footer"><span className={`of-card-state ${p.status}`}>{statusLabel[p.status]}</span></div>
           </div>
         </Link>)}
       </div>

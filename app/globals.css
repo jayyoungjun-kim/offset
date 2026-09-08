@@ -129,3 +129,6 @@ main{padding-top:60px}
 
 /* QA environment banner, rendered only by the QA server. */
 .qa-environment-banner{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 18px;background:#111111;color:#fff;padding:8px 16px;font:13px/1.6 Pretendard,sans-serif}.qa-environment-banner strong{letter-spacing:.06em}.qa-environment-banner a{text-decoration:underline;text-underline-offset:3px}.qa-environment-banner span{color:#dddddd}
+
+/* Shared footer: white surface and a subtle top divider. */
+.site-footer,.service-page .site-footer{background:#fff;border-top:1px solid #e8e8eb}

@@ -5,7 +5,7 @@ export function cleanDetailHtml(html:string) {
     allowedTags:["p","br","h2","h3","h4","strong","b","em","i","u","s","ul","ol","li","a","img","figure","figcaption","blockquote","hr","table","thead","tbody","tr","th","td","details","summary","div","span"],
     allowedAttributes:{a:["href","title"],img:["src","alt","width","height"],th:["colspan","rowspan"],td:["colspan","rowspan"],details:["open"],"*":["style"]},
     allowedSchemes:["https","mailto"],allowedSchemesByTag:{img:["https"]},allowProtocolRelative:false,
-    allowedStyles:{"*":{"text-align":[/^(left|center|right)$/],color:[/^#[0-9a-fA-F]{3,8}$/],"background-color":[/^#[0-9a-fA-F]{3,8}$/],"font-size":[/^(1[4-9]|[2-4][0-9]|50)px$/],"font-weight":[/^(400|500|600|700)$/]}},
+    allowedStyles:{"*":{"text-align":[/^(left|center|right)$/],color:[/^#[0-9a-fA-F]{3,8}$/],"background-color":[/^#[0-9a-fA-F]{3,8}$/],"font-size":[/^([89]|[1-9][0-9]|1[01][0-9]|120)px$/],"font-weight":[/^(400|500|600|700)$/]}},
     transformTags:{a:(_tag,attrs)=>({tagName:"a",attribs:{...attrs,rel:"noopener noreferrer"}})},
   });
 }

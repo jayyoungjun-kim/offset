@@ -465,11 +465,14 @@ test("managed images enforce admin access, persist, attach, clear and delete", a
 });
 
 test("admin HTML round trip renders formatting and removes executable content", async () => {
- const raw='<h3>HTML 편집 제목</h3><p style="text-align: center">보존할 <strong>본문</strong></p><script>alert(1)</script><img src="https://example.test/image.png" onerror="alert(1)"><a href="javascript:alert(1)">링크</a><iframe src="https://example.test"></iframe><table><tr><td>표 내용</td></tr></table>';
+ const raw='<h3>HTML 편집 제목</h3><p style="text-align: center">보존할 <strong>본문</strong></p><span style="font-size:12px">작은 글자</span><span style="font-size:64px">큰 글자</span><span style="font-size:999px">범위 초과</span><script>alert(1)</script><img src="https://example.test/image.png" onerror="alert(1)"><a href="javascript:alert(1)">링크</a><iframe src="https://example.test"></iframe><table><tr><td>표 내용</td></tr></table>';
  const saved=await request("/api/admin/programs",{method:"POST",token:adminToken,body:{...p,status:"open",detailSections:[{id:"overview",title:"상세 HTML",body:"기존 원문",html:raw}]}});
  assert.equal(saved.status,200);
  const result=await saved.json();
  assert.match(result.program.detailSections[0].html,/<strong>본문<\/strong>/);
+ assert.match(result.program.detailSections[0].html,/font-size:12px/);
+ assert.match(result.program.detailSections[0].html,/font-size:64px/);
+ assert.doesNotMatch(result.program.detailSections[0].html,/999px/);
  assert.doesNotMatch(result.program.detailSections[0].html,/script|onerror|javascript:|iframe/);
  const fetched=await (await request("/api/admin/programs",{token:adminToken})).json();
  assert.equal(fetched.programs.find(x=>x.id===p.id).detailSections[0].html,result.program.detailSections[0].html);

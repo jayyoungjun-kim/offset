@@ -1,8 +1,7 @@
 name: Deploy Production
 
+# Run only after an explicit production release request.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -12,7 +11,7 @@ permissions:
 
 concurrency:
   group: production
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -22,24 +21,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run build
-      - name: Generate static site
-        run: |
-          npm run start &
-          server_pid=$!
-          trap 'kill $server_pid' EXIT
-          for attempt in {1..30}; do
-            if curl --fail --silent http://127.0.0.1:3000/ > /dev/null; then
-              break
-            fi
-            sleep 1
-          done
-          node scripts/build-github-pages.mjs http://127.0.0.1:3000
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
